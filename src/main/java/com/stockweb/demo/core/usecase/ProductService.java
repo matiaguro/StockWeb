@@ -8,7 +8,7 @@ public interface ProductService {
 
     void updateEntityIfExists(Long id, Product product);
 
-
+    void upDateAmount (Long id, Long amount);
 
 
 }

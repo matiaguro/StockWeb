@@ -6,9 +6,11 @@ import com.stockweb.demo.core.usecase.ProductService;
 import com.stockweb.demo.ports.input.rs.api.ProductApi;
 import com.stockweb.demo.ports.input.rs.mapper.ProductControllerMapper;
 import com.stockweb.demo.ports.input.rs.request.ProductRequest;
+import com.stockweb.demo.ports.input.rs.request.ProductRequestAmount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,12 +49,22 @@ public class ProductController implements ProductApi {
 
         return ResponseEntity.created(location).build();
     }
-
+    @Override
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void upDateMember(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
+    public void upDateProduct(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
         Product product = mapper.productRequestToProduct(productRequest);
         productService.updateEntityIfExists(id, product);
     }
+    @Override
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void upDateAmount(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequestAmount productRequestAmount) {
+        Long amount = productRequestAmount.getAmount();
+        productService.upDateAmount(id, amount);
+
+    }
+
+
 
 }
