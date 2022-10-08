@@ -6,6 +6,9 @@ public interface ProductService {
 
     Long createEntity(Product product);
 
+    void updateEntityIfExists(Long id, Product product);
+
+
 
 
 }
