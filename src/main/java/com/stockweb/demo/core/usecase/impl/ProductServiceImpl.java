@@ -33,4 +33,13 @@ public class ProductServiceImpl implements ProductService {
                 }).orElseThrow(() -> new NotFoundException(id));
     }
 
+    public void upDateAmount (Long id, Long amount){
+        productRepository.findById(id)
+                .map(productJpa -> {
+                    productJpa.setAmount(amount);
+                    return productRepository.save(productJpa);
+                }).orElseThrow(() -> new NotFoundException(id));
+
+    }
+
 }
