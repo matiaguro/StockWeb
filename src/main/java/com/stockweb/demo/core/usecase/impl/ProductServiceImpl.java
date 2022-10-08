@@ -1,5 +1,6 @@
 package com.stockweb.demo.core.usecase.impl;
 
+import com.stockweb.demo.config.NotFoundException;
 import com.stockweb.demo.core.model.Product;
 import com.stockweb.demo.core.repository.ProductRepository;
 import com.stockweb.demo.core.usecase.ProductService;
@@ -18,6 +19,18 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Long createEntity(Product product) {
         return productRepository.save(product).getId();
+    }
+
+
+
+    public void updateEntityIfExists(Long id, Product product) {
+        productRepository.findById(id)
+                .map(productJpa -> {
+                    productJpa.setName(product.getName());
+                    productJpa.setAmount(product.getAmount());
+                    productJpa.setDescription(product.getDescription());
+                    return productRepository.save(productJpa);
+                }).orElseThrow(() -> new NotFoundException(id));
     }
 
 }
