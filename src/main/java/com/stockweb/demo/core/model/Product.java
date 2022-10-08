@@ -1,12 +1,20 @@
 package com.stockweb.demo.core.model;
 
 
+import com.stockweb.demo.core.model.audit.Audit;
+import com.stockweb.demo.core.model.audit.AuditListener;
+import com.stockweb.demo.core.model.audit.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,10 +26,10 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table (name = "product")
-//@Where(clause = "is_active=true")
-//@SQLDelete(sql = "UPDATE product SET is_active=false WHERE product_id=?")
-//@EntityListeners(AuditListener.class)
-public class Product {
+@Where(clause = "is_active=true")
+@SQLDelete(sql = "UPDATE product SET is_active=false WHERE product_id=?")
+@EntityListeners(AuditListener.class)
+public class Product implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +44,9 @@ public class Product {
 
     @Column
     private String description;
+
+    @Embedded
+    private Audit audit;
 
     @Override
     public boolean equals(Object o) {
