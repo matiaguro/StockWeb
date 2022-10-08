@@ -19,4 +19,6 @@ public interface ProductApi {
     public void upDateProduct(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequest productRequest);
 
     public void upDateAmount(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequestAmount productRequestAmount);
+
+    public void DeleteProduct(@NotNull @PathVariable Long id);
 }
