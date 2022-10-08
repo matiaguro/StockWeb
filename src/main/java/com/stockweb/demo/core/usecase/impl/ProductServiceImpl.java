@@ -42,4 +42,8 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    public void deleteById(Long id){
+        productRepository.findById(id).ifPresent(productRepository::delete);
+    }
+
 }

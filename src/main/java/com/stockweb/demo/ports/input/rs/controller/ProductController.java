@@ -10,6 +10,7 @@ import com.stockweb.demo.ports.input.rs.request.ProductRequestAmount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,6 +63,13 @@ public class ProductController implements ProductApi {
     public void upDateAmount(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequestAmount productRequestAmount) {
         Long amount = productRequestAmount.getAmount();
         productService.upDateAmount(id, amount);
+
+    }
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void DeleteProduct(@NotNull @PathVariable Long id){
+        productService.deleteById(id);
 
     }
 
