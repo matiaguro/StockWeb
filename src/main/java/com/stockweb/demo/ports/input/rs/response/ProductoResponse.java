@@ -1,40 +1,42 @@
-package com.stockweb.demo.ports.input.rs.request;
+package com.stockweb.demo.ports.input.rs.response;
+
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+
+@Setter
+@Getter
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoRequest {
+public class ProductoResponse {
 
-    @NotBlank(message = "Producto cannot be null")
+    private Long idProducto;
+
     @JsonProperty("producto")
     private String producto;
 
-    @NotNull(message = "Stock cannot be null")
+    @JsonProperty("descripcion")
+    private String descripcion;
+
     @JsonProperty("stock")
     private Long stock;
 
-    @NotNull(message = "Precio cannot be null")
+    @JsonProperty("fechaUltimoInv")
+    private Date fechaUltimoInv;
+
     @JsonProperty("precio")
     private Long precio;
 
     @JsonProperty("imgUrl")
     private String imgUrl;
-
-    @JsonProperty("descripcion")
-    private String descripcion;
-
-    @JsonProperty("fechaUltimoInv")
-    private Date fechaUltimoInv;
-
 }

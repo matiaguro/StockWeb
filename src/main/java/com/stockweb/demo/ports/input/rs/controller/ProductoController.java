@@ -1,14 +1,18 @@
 package com.stockweb.demo.ports.input.rs.controller;
 
 
-import com.stockweb.demo.core.model.Product;
+import com.stockweb.demo.core.model.ProductList;
+import com.stockweb.demo.core.model.Producto;
 import com.stockweb.demo.core.usecase.ProductoService;
-import com.stockweb.demo.ports.input.rs.api.ProductApi;
-import com.stockweb.demo.ports.input.rs.mapper.ProductControllerMapper;
-import com.stockweb.demo.ports.input.rs.request.ProductRequest;
-import com.stockweb.demo.ports.input.rs.request.ProductRequestAmount;
-import com.stockweb.demo.ports.input.rs.response.ProductResponse;
+import com.stockweb.demo.ports.input.rs.api.ApiConstants;
+import com.stockweb.demo.ports.input.rs.api.ProductoApi;
+import com.stockweb.demo.ports.input.rs.mapper.ProductoControllerMapper;
+import com.stockweb.demo.ports.input.rs.request.ProductoRequest;
+import com.stockweb.demo.ports.input.rs.request.ProductoRequestAmount;
+import com.stockweb.demo.ports.input.rs.response.ProductoResponse;
+import com.stockweb.demo.ports.input.rs.response.ProductoResponseLista;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,61 +32,83 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
-import static com.stockweb.demo.ports.input.rs.api.ApiConstans.PRODUCT_URI;
+import static com.stockweb.demo.ports.input.rs.api.ApiConstants.PRODUCT_URI;
 
 @RestController
 @RequestMapping(PRODUCT_URI)
 @RequiredArgsConstructor
-public class ProductController implements ProductApi {
+public class ProductoController implements ProductoApi {
 
-    private final ProductControllerMapper mapper;
+    private final ProductoControllerMapper mapper;
 
-    private  final ProductoService productService;
+    private  final ProductoService productoService;
 
     @Override
     @PostMapping
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductRequest productRequest) {
-
-        Product product = mapper.productRequestToProduct(productRequest);
-
-        final long id = productService.createEntity(product);
-
+    public ResponseEntity<Void> createProducto(@Valid @RequestBody ProductoRequest productoRequest) {
+        Producto producto = mapper.productoRequestToProducto(productoRequest);
+        final long idProducto = productoService.createEntity(producto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(id)
+                .path("/{id}").buildAndExpand(idProducto)
                 .toUri();
-
         return ResponseEntity.created(location).build();
-    }
-    @Override
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void upDateProduct(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
-        Product product = mapper.productRequestToProduct(productRequest);
-        productService.updateEntityIfExists(id, product);
-    }
-    @Override
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void upDateAmount(@NotNull @PathVariable Long id, @Valid @RequestBody ProductRequestAmount productRequestAmount) {
-        Long amount = productRequestAmount.getAmount();
-        productService.upDateAmount(id, amount);
 
     }
     @Override
-    @DeleteMapping("/{id}")
+    @PutMapping("/editproducto/{idProducto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void DeleteProduct(@NotNull @PathVariable Long id){
-        productService.deleteById(id);
+    public void upDateProducto(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequest productoRequest) {
+        Producto producto = mapper.productoRequestToProducto(productoRequest);
+        productoService.updateEntityIfExists(idProducto, producto);
+    }
+    @Override
+    @PatchMapping("/{idProducto}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void upDateStock(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequestAmount productoRequestAmount) {
+        Long stock = productoRequestAmount.getStock();
+        productoService.upDateStock(idProducto, stock);
+    }
+    @Override
+    @DeleteMapping("/{idProducto}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void DeleteProducto(@NotNull @PathVariable Long idProducto){
+        productoService.deleteById(idProducto);
 
     }
 
+    @Override
+    @GetMapping("/allproductos")
+    public ResponseEntity<ProductoResponseLista> getAllProductos(@RequestParam Optional<Integer> page,
+                                                            @RequestParam Optional<Integer> size) {
 
-    @GetMapping("/{name}")
-    public ResponseEntity<ProductResponse> getByNameProducts(@NotNull @PathVariable String name) {
-        List<Product> products = productService.findByName(name);
-        ProductResponse response = mapper.productToProductResponse(products);
-        return ResponseEntity.ok(response);
+       final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
+       final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
+
+       ProductList list = productoService.getLista(PageRequest.of(pageNumber,pageSize));
+
+       ProductoResponseLista response;
+       {
+           response = new ProductoResponseLista();
+           List<ProductoResponse> contenido = mapper.productoListaToProductoResponseList(list.getContent());
+           response.setContent(contenido);
+
+           final int nextPage = list.getPageable().next().getPageNumber();
+           response.setNextUri(ApiConstants.uriByPageAsString.apply(nextPage));
+
+           final int previousPage = list.getPageable().previousOrFirst().getPageNumber();
+           response.setPreviousUri(ApiConstants.uriByPageAsString.apply(previousPage));
+
+           response.setTotalPages(list.getTotalPages());
+           response.setTotalElements(list.getTotalElements());}
+       return ResponseEntity.ok().body(response);}
+    @Override
+    @GetMapping("/byid/{idProducto}")
+    public ResponseEntity<ProductoResponse> findById(@NotNull @PathVariable Long idProducto) {
+        Producto producto= productoService.findById(idProducto);
+        ProductoResponse response = mapper.productoToResponseProducto(producto);
+        return ResponseEntity.ok(response);}
     }
 
-}
+

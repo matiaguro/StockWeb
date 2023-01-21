@@ -2,10 +2,10 @@ package com.stockweb.demo.ports.input.rs.api;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.function.Function;
 
-public interface ApiConstans {
+public interface ApiConstants {
 
 
-    String PRODUCT_URI = "/v1/products";
+    String PRODUCT_URI = "/productos";
 
     int DEFAULT_PAGE = 0;
     int DEFAULT_PAGE_SIZE = 10;

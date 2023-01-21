@@ -1,0 +1,26 @@
+Listado de tareas Stock
+
+
+Api de gestion de productos
+
+	Repository
+		-interfaz extends jpaRepo
+
+	Controller
+		-exponer endpoints para metodos crud
+			-post
+			-delete
+			-get
+			-puth
+
+	Service
+		-Metodos Crud
+			-insert
+			-delete por id
+			-buscar findid
+			-buscar findall page
+			-editar por id
+
+	Modelo
+
+		ESTADOS EN ORDEN

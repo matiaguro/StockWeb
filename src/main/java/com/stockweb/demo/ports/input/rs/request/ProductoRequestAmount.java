@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequestAmount {
+public class ProductoRequestAmount {
 
     @NotNull(message = "Stock cannot be null")
     @JsonProperty("stock")

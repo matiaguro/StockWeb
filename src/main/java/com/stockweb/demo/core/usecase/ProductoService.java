@@ -1,20 +1,20 @@
 package com.stockweb.demo.core.usecase;
 
+import com.stockweb.demo.core.model.ProductList;
 import com.stockweb.demo.core.model.Producto;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
+public interface ProductoService {
 
-public interface ProductService {
+    Long createEntity(Producto producto);
 
-    Long createEntity(Producto product);
+    void updateEntityIfExists(Long idProducto, Producto producto);
 
-    void updateEntityIfExists(Long id, Producto product);
+    void upDateStock (Long idProducto, Long stock);
 
-    void upDateAmount (Long id, Long amount);
+    void deleteById(Long idProducto);
 
-    void deleteById(Long id);
+    ProductList getLista(PageRequest pageRequest);
 
-    List<Producto> findByName (String name);
-
-
+    Producto findById(Long idProducto);
     }
