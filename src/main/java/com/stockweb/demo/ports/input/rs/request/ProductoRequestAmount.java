@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProductRequestAmount {
 
-    @NotNull(message = "Amount cannot be null")
-    @JsonProperty("amount")
-    private Long amount;
+    @NotNull(message = "Stock cannot be null")
+    @JsonProperty("stock")
+    private Long stock;
 
 }

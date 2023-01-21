@@ -14,15 +14,15 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProductRequest {
 
-    @NotBlank(message = "Name cannot be null")
-    @JsonProperty("name")
-    private String name;
+    @NotBlank(message = "Producto cannot be null")
+    @JsonProperty("producto")
+    private String producto;
 
-    @NotNull(message = "Amount cannot be null")
-    @JsonProperty("amount")
-    private Long amount;
+    @NotNull(message = "Stock cannot be null")
+    @JsonProperty("stock")
+    private Long stock;
 
-    @JsonProperty("description")
-    private String description;
+    @JsonProperty("descripcion")
+    private String descripcion;
 
 }
