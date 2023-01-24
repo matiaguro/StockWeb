@@ -28,19 +28,19 @@ public class Producto  {
     @Column (nullable = false)
     private String producto;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "bigint default 0")
     private Long stock;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "bigint default 0")
     private Long precio;
 
-    @Column
+    @Column (nullable = false, columnDefinition = "varchar(255) default -")
     private String imgUrl;
 
-    @Column
+    @Column (nullable = false, columnDefinition = "varchar(255) default -")
     private String descripcion;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "datetime")
     private Date fechaUltimoInv;
 
     @Override

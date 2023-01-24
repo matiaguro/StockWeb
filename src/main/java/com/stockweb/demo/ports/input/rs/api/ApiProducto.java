@@ -1,14 +1,12 @@
 package com.stockweb.demo.ports.input.rs.api;
 
 
-        import com.stockweb.demo.config.NotFoundException;
         import com.stockweb.demo.ports.input.rs.request.ProductoRequest;
         import com.stockweb.demo.ports.input.rs.request.ProductoRequestAmount;
         import com.stockweb.demo.ports.input.rs.response.ProductoResponse;
         import com.stockweb.demo.ports.input.rs.response.ProductoResponseLista;
         import org.springframework.http.ResponseEntity;
         import org.springframework.validation.annotation.Validated;
-        import org.springframework.web.bind.annotation.GetMapping;
         import org.springframework.web.bind.annotation.PathVariable;
         import org.springframework.web.bind.annotation.RequestBody;
         import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +16,7 @@ package com.stockweb.demo.ports.input.rs.api;
         import java.util.Optional;
 
 @Validated
-public interface ProductoApi {
+public interface ApiProducto {
 
 
     ResponseEntity<Void> createProducto(@Valid @RequestBody ProductoRequest productoRequest);
