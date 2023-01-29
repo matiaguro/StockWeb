@@ -4,6 +4,7 @@ package com.stockweb.demo.core.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,19 +29,20 @@ public class Producto  {
     @Column (nullable = false)
     private String producto;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "bigint default 0")
     private Long stock;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "bigint default 0")
     private Long precio;
 
-    @Column
+    @Column (nullable = false, columnDefinition = "varchar(255) default -")
     private String imgUrl;
 
-    @Column
+    @Column (nullable = false, columnDefinition = "varchar(255) default -")
     private String descripcion;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaUltimoInv;
 
     @Override

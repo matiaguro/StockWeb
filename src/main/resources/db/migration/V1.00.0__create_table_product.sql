@@ -1,12 +1,12 @@
 drop table if exists PRODUCTO;
 
-CREATE TABLE PRODUCTO (
-	ID_PRODUCTO				Long		 				    NOT NULL,
-	IMG_URL					VARCHAR(300)                    null,
-	PRODUCTO				VARCHAR(200)				    NOT NULL,
-	PRECIO					Long 	        DEFAULT (0)	    NOT NULL,
-	STOCK					Long 	        DEFAULT (0)	    NOT NULL,
-	DESCRIPCION				VARCHAR(200)    default ('-')   null,
-	FECHA_ULTIMO_INV		DATE          				    null,
-	PRIMARY KEY (ID_PRODUCTO)
+CREATE TABLE producto (
+  id_producto BIGINT AUTO_INCREMENT NOT NULL,
+   producto VARCHAR(255) NOT NULL,
+   stock BIGINT DEFAULT 0 NOT NULL,
+   precio BIGINT DEFAULT 0 NOT NULL,
+   img_url VARCHAR(255) DEFAULT '-' NOT NULL,
+   descripcion VARCHAR(255) DEFAULT '-' NOT NULL,
+   fecha_ultimo_inv datetime NOT NULL,
+   CONSTRAINT pk_producto PRIMARY KEY (id_producto)
 )engine = InnoDB;

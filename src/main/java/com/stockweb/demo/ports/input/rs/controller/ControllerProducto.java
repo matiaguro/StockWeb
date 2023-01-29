@@ -5,12 +5,12 @@ import com.stockweb.demo.core.model.ProductList;
 import com.stockweb.demo.core.model.Producto;
 import com.stockweb.demo.core.usecase.ProductoService;
 import com.stockweb.demo.ports.input.rs.api.ApiConstants;
-import com.stockweb.demo.ports.input.rs.api.ProductoApi;
+import com.stockweb.demo.ports.input.rs.api.ApiProducto;
 import com.stockweb.demo.ports.input.rs.mapper.ProductoControllerMapper;
-import com.stockweb.demo.ports.input.rs.request.ProductoRequest;
-import com.stockweb.demo.ports.input.rs.request.ProductoRequestAmount;
-import com.stockweb.demo.ports.input.rs.response.ProductoResponse;
-import com.stockweb.demo.ports.input.rs.response.ProductoResponseLista;
+import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequest;
+import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequestAmount;
+import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponse;
+import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponseLista;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ import static com.stockweb.demo.ports.input.rs.api.ApiConstants.PRODUCT_URI;
 @RestController
 @RequestMapping(PRODUCT_URI)
 @RequiredArgsConstructor
-public class ProductoController implements ProductoApi {
+public class ControllerProducto implements ApiProducto {
 
     private final ProductoControllerMapper mapper;
 
@@ -57,7 +57,7 @@ public class ProductoController implements ProductoApi {
 
     }
     @Override
-    @PutMapping("/editproducto/{idProducto}")
+    @PutMapping("/editProducto/{idProducto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void upDateProducto(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequest productoRequest) {
         Producto producto = mapper.productoRequestToProducto(productoRequest);
@@ -104,7 +104,7 @@ public class ProductoController implements ProductoApi {
            response.setTotalElements(list.getTotalElements());}
        return ResponseEntity.ok().body(response);}
     @Override
-    @GetMapping("/byid/{idProducto}")
+    @GetMapping("/byId/{idProducto}")
     public ResponseEntity<ProductoResponse> findById(@NotNull @PathVariable Long idProducto) {
         Producto producto= productoService.findById(idProducto);
         ProductoResponse response = mapper.productoToResponseProducto(producto);

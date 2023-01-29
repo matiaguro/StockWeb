@@ -1,4 +1,4 @@
-package com.stockweb.demo.ports.input.rs.request;
+package com.stockweb.demo.ports.input.rs.request.producto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -24,3 +24,73 @@ Api de gestion de productos
 	Modelo
 
 		ESTADOS EN ORDEN
+
+
+Gestion de usuario
+        -crear tablas
+            -migraciones
+                -create table usuarios
+                -create table roles
+        -crear ADD ROLES
+                -admin
+                -usuario
+                -sin_asignar
+
+        -crud completo de gestion usuario
+            - crear
+            - editar rol
+            - editar datos
+            - cambio de contra
+            - eliminar
+            - ver lista de usuarios
+
+        -Modelo Usuario
+            -UsuarioResponse
+            -UsuarioRequest
+            -atributos
+            -relaciones
+
+        -Modelo Rol
+
+        -Repos
+            -Repo usuario
+            -Repo rol
+
+        -ApiUsuarios
+            -metodos mapping
+                -crearUsuario
+                -editarRol
+                -editarUsuario
+                -cambiarContraseña
+                -eliminarUsuario
+                -getUsuarios
+
+        -Sumar constante URL
+            USUARIOS_URI"/usuarios"
+
+        -Controller metodos
+            -metodos mapping
+                -crearUsuario ./
+                -editarUsuario ./
+                -cambiarContraseña ./
+                -eliminarUsuario ./
+                -getUsuarios ./
+
+        -interfaz ServiceUsuario
+             -crearUsuario
+             -editarRol
+             -editarUsuario
+             -cambiarContraseña
+             -eliminarUsuario
+             -getUsuarios
+
+        -implementar interfaz ServiceUsuario
+
+
+        UsuarioControllerMapper
+            -usuarioRequestToUsuario
+            -usuarioToResponseUsuario
+
+REVISAR BUSCADO POR NOMBRE PRODUCTO
+
+
