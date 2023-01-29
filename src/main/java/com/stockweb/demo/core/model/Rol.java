@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,4 +27,17 @@ public class Rol {
 
     @Column(name = "rol_name", nullable = false)
     private String rolName;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rol rol = (Rol) o;
+        return  Objects.equals(idRol, rol.idRol);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idRol);
+    }
 }

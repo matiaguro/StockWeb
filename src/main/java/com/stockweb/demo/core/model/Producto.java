@@ -4,6 +4,7 @@ package com.stockweb.demo.core.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,7 @@ public class Producto  {
     private String descripcion;
 
     @Column (nullable = false, columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaUltimoInv;
 
     @Override

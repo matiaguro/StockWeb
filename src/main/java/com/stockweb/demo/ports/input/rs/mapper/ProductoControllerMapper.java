@@ -1,8 +1,8 @@
 package com.stockweb.demo.ports.input.rs.mapper;
 
 import com.stockweb.demo.core.model.Producto;
-import com.stockweb.demo.ports.input.rs.request.ProductoRequest;
-import com.stockweb.demo.ports.input.rs.response.ProductoResponse;
+import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequest;
+import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponse;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;

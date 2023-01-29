@@ -6,7 +6,7 @@ import com.stockweb.demo.core.model.Producto;
 import com.stockweb.demo.core.model.datetime.Fecha;
 import com.stockweb.demo.core.repository.ProductoRepository;
 import com.stockweb.demo.core.usecase.ProductoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productRepository;
-
-    @Autowired
-    public ProductoServiceImpl(ProductoRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-
 
     @Override
     @Transactional
@@ -55,8 +49,8 @@ public class ProductoServiceImpl implements ProductoService {
     }
     @Override
     @Transactional
-    public void deleteById(Long id){
-        productRepository.findById(id).ifPresent(productRepository::delete);
+    public void deleteById(Long idProducto){
+        productRepository.findById(idProducto).ifPresent(productRepository::delete);
     }
 
     @Override

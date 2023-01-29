@@ -1,4 +1,4 @@
-package com.stockweb.demo.ports.input.rs.response;
+package com.stockweb.demo.ports.input.rs.response.producto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

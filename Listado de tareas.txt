@@ -70,12 +70,11 @@ Gestion de usuario
 
         -Controller metodos
             -metodos mapping
-                -crearUsuario
-                -editarRol
-                -editarUsuario
-                -cambiarContraseña
-                -eliminarUsuario
-                -getUsuarios
+                -crearUsuario ./
+                -editarUsuario ./
+                -cambiarContraseña ./
+                -eliminarUsuario ./
+                -getUsuarios ./
 
         -interfaz ServiceUsuario
              -crearUsuario
