@@ -1,6 +1,7 @@
 package com.stockweb.demo.ports.input.rs.controller;
 
 
+import com.stockweb.demo.core.model.Usuario;
 import com.stockweb.demo.core.model.UsuarioList;
 import com.stockweb.demo.core.usecase.UsuarioService;
 import com.stockweb.demo.ports.input.rs.api.ApiConstants;
@@ -8,30 +9,22 @@ import com.stockweb.demo.ports.input.rs.api.ApiUsuario;
 import com.stockweb.demo.ports.input.rs.mapper.UsuarioControllerMapper;
 import com.stockweb.demo.ports.input.rs.request.usuario.UpdatePasswordRequest;
 import com.stockweb.demo.ports.input.rs.request.usuario.UpdateUsuarioRequest;
-import com.stockweb.demo.ports.input.rs.request.usuario.UsuarioRequest;
-import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponse;
-import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponseLista;
 import com.stockweb.demo.ports.input.rs.response.usuario.UsuarioResponse;
 import com.stockweb.demo.ports.input.rs.response.usuario.UsuarioResponseLista;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,36 +40,22 @@ public class ControllerUsuario implements ApiUsuario {
     private  final UsuarioService usuarioService;
 
     @Override
-    @PostMapping
-    public ResponseEntity<Void> crearUsuario (@Valid @RequestBody UsuarioRequest usuarioRequest){
-
-        final long idUsuario = usuarioService.createEntity(usuarioRequest.getUsuario(),usuarioRequest.getPassword(),usuarioRequest.getIdRol());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                  .path("/{id}").buildAndExpand(idUsuario)
-                 .toUri();
-        return ResponseEntity.created(location).build();
-    }
-    @Override
     @PatchMapping("/updatePassword/{idUsuario}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword (@NotNull @PathVariable Long idUsuario, @Valid @RequestBody UpdatePasswordRequest passwordRequest){
-        String newPassword = passwordRequest.getNewPassword();
-        usuarioService.upDatePassword(idUsuario, newPassword);
-
+        usuarioService.upDatePassword(idUsuario, passwordRequest.getNewPassword());
     }
+
     @Override
     @DeleteMapping("/{idUsuario}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void DeleteProducto(@NotNull @PathVariable Long idUsuario){
+    public void deleteUsuario(@NotNull @PathVariable Long idUsuario){
         usuarioService.deleteById(idUsuario);
     }
 
-
     @Override
     @PatchMapping("/editUsuario/{idUsuario}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void upDateUsuario(@NotNull @PathVariable Long idUsuario, @Valid @RequestBody UpdateUsuarioRequest updateUsuarioRequest){
-        usuarioService.updateUsuarioIfExists(idUsuario, updateUsuarioRequest.getUsuario(), updateUsuarioRequest.getIdRol());
+    public void upDateUsuario(@NotNull @PathVariable Long idUsuario, @RequestBody UpdateUsuarioRequest updateUsuarioRequest){
+        Usuario usuario = mapper.updateUsuarioRequestToUser(updateUsuarioRequest);
+        usuarioService.updateUsuarioIfExists(idUsuario,usuario,updateUsuarioRequest.getIdRol());
     }
 
     @Override
@@ -105,8 +84,7 @@ public class ControllerUsuario implements ApiUsuario {
             response.setTotalElements(list.getTotalElements());}
         return ResponseEntity.ok().body(response);
     }
-
-    }
+}
 
 
 

@@ -79,7 +79,7 @@ public class ControllerProducto implements ApiProducto {
     }
 
     @Override
-    @GetMapping("/allproductos")
+    @GetMapping("/allProductos")
     public ResponseEntity<ProductoResponseLista> getAllProductos(@RequestParam Optional<Integer> page,
                                                             @RequestParam Optional<Integer> size) {
 

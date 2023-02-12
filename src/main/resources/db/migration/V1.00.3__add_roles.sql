@@ -1,9 +1,11 @@
-insert into roles(rol_name) values ("SIN_ASIGNAR");
+insert into role(rol_name) values ("SIN_ASIGNAR");
 
-insert into roles(rol_name) values ("ADMIN");
+insert into role(rol_name) values ("ROLE_USER");
 
-insert into roles(rol_name) values ("OPERADOR");
+insert into role(rol_name) values ("ROLE_ADMIN");
 
-insert into USUARIOS(USUARIO, PASSWORD, ID_ROL) values ("Matias Romero", "A>>1234",2);
+insert into USUARIO(LASTNAME, FIRSTNAME, PASSWORD, ID_ROL, EMAIL) values ("Romero","Matias", "$2a$12$VT0nvnWKjSNR4FDoZx9XgOjPl2hV9HtVkCUSiAMBgwtv2hqRmWbCC",3, "mRomero@ar");
 
-insert into USUARIOS(USUARIO, PASSWORD, ID_ROL) values ("Almada Tomas", "A>>1234",2);
+insert into USUARIO(LASTNAME, FIRSTNAME, PASSWORD, ID_ROL, EMAIL) values ("Almada","Tomas", "$2a$12$0q1jlrAaPsG6hqkwhVU7fOH8wTwDzywHmsEixRFpvkwMApsyt2VT.",3, "tAlmada@ar");
+
+insert into USUARIO(LASTNAME, FIRSTNAME, PASSWORD, ID_ROL, EMAIL) values ("Pedro","Varela","57e517d33bf9bcd410cc572962219d6ef59640dc3f904769c2482028353fc504",2, "pVarela@ar");

@@ -13,8 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateUsuarioRequest {
 
-    @JsonProperty("usuario")
-    private String usuario;
+
+    @JsonProperty("firstname")
+    private String firstname;
+
+    @JsonProperty("lastname")
+    private String lastname;
+
+    @JsonProperty("email")
+    private String email;
 
     @JsonProperty("id_rol")
     private Long idRol;

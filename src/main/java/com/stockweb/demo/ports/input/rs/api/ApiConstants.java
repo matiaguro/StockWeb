@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 public interface ApiConstants {
 
-
+    String AUTH_URI= "/auth";
     String PRODUCT_URI = "/productos";
     String USUARIOS_URI ="/usuarios";
 
