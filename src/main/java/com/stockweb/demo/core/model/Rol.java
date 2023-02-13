@@ -4,6 +4,7 @@ package com.stockweb.demo.core.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +18,8 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "roles")
-public class Rol {
+@Table(name = "role")
+public class Rol implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +40,10 @@ public class Rol {
     @Override
     public int hashCode() {
         return Objects.hash(idRol);
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.rolName;
     }
 }

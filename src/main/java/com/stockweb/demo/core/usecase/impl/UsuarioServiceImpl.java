@@ -1,8 +1,6 @@
 package com.stockweb.demo.core.usecase.impl;
 
 import com.stockweb.demo.config.NotFoundException;
-import com.stockweb.demo.core.model.ProductList;
-import com.stockweb.demo.core.model.Producto;
 import com.stockweb.demo.core.model.Rol;
 import com.stockweb.demo.core.model.Usuario;
 import com.stockweb.demo.core.model.UsuarioList;
@@ -12,6 +10,7 @@ import com.stockweb.demo.core.usecase.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,25 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final RolRepository rolRepository;
+
     private final UsuarioRepository usuarioRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
-    @Override
-    @Transactional
-    public Long createEntity(String usuario, String password, Long idRol) {
-        Rol rol = rolRepository.findById(idRol).orElseThrow(() -> new NotFoundException(idRol));
-        Usuario user = new Usuario();
-        user.setUsuario(usuario);
-        user.setPassword(password);
-        user.setRol(rol);
-        return usuarioRepository.save(user).getIdUsuario();
-    }
+
 
     @Override
     @Transactional
     public void upDatePassword(Long idUsuario, String newPassword) {
         usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
-            usuarioJpa.setPassword(newPassword);
+            usuarioJpa.setPassword(passwordEncoder.encode(newPassword));
             return usuarioRepository.save(usuarioJpa);
         }).orElseThrow(() -> new NotFoundException(idUsuario));
     }
@@ -51,17 +43,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public void updateUsuarioIfExists(Long idUsuario, String nameUsuario, Long newLong) {
-
-        if (!nameUsuario.isEmpty()) {
+    public void updateUsuarioIfExists(Long idUsuario, Usuario usuario, Long newRol) {
             usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
-                usuarioJpa.setUsuario(nameUsuario);
+                if (usuario.getFirstname() != null) { usuarioJpa.setFirstname(usuario.getFirstname());}
+                if (usuario.getEmail() != null) { usuarioJpa.setEmail(usuario.getEmail()); }
+                if (usuario.getLastname() != null) { usuarioJpa.setLastname(usuario.getLastname()); }
                 return usuarioRepository.save(usuarioJpa);
             });
-        }
-
-        if (newLong != null) {
-            Rol rol = rolRepository.findById(newLong).orElseThrow(() -> new NotFoundException(newLong));
+        if (newRol != null) {
+            Rol rol = rolRepository.findById(newRol).orElseThrow(() -> new NotFoundException(newRol));
             usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
                 usuarioJpa.setRol(rol);
                 return usuarioRepository.save(usuarioJpa);
@@ -71,10 +61,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioList getLista (PageRequest pageRequest){
+    public UsuarioList getLista(PageRequest pageRequest) {
         Page<Usuario> page = usuarioRepository.findAll(pageRequest);
         return new UsuarioList(page.getContent(), pageRequest, page.getTotalElements());
     }
+
+
 }
 
 

@@ -16,8 +16,14 @@ public class UsuarioResponse {
     @JsonProperty("id_usuario")
     private Long idUsuario;
 
-    @JsonProperty("usuario")
-    private String usuario;
+    @JsonProperty("firstname")
+    private String firstname;
+
+    @JsonProperty("lastname")
+    private String lastname;
+
+    @JsonProperty("email")
+    private String email;
 
     @JsonProperty("rol")
     private Rol rol;
