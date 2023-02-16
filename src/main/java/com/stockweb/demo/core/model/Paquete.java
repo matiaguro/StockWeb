@@ -28,6 +28,9 @@ public class Paquete {
     @Column(name = "id_paquete")
     private Long idPaquete;
 
+    @Column (name = "nombre_paquete", nullable = false, columnDefinition = "varchar(100) default Paquete")
+    private String nombrePaquete;
+
     @Column (name = "precio_paquete", nullable = false, columnDefinition = "bigint default 0")
     private Long precioPaquete;
 
