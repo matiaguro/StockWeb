@@ -10,11 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,13 +29,37 @@ public class Paquete {
     @Column(name = "id_paquete")
     private Long idPaquete;
 
-    @Column (name = "precio_paquete", nullable = false, columnDefinition = "bigint default 0")
+    @Column (name = "nombre_paquete", columnDefinition = "varchar(100) default Paquete")
+    private String nombrePaquete;
+
+    @Column (name = "precio_paquete", columnDefinition = "bigint default 0")
     private Long precioPaquete;
 
 
-    @ManyToMany(mappedBy = "paquetes")
+
+    @ManyToMany
+    @JoinTable(name = "producto_paquete",
+            joinColumns = @JoinColumn(name = "id_paquete"),
+            inverseJoinColumns = @JoinColumn(name = "id_producto"))
     @ToString.Exclude
-    private Set<Producto> productos = new HashSet<>();
+    private List<Producto> productos;
+
+    public void addProducto (Producto producto){
+        productos.add(producto);
+    }
+
+    public void deleteProducto (Producto producto){
+        productos.remove(producto);
+    }
+
+    public Producto selectProductoById(Long idProducto){
+        for (Producto producto : productos){
+            if (producto.getIdProducto()==idProducto){
+                return producto;
+            }
+        }
+        return null;
+    }
 
 
     @Override

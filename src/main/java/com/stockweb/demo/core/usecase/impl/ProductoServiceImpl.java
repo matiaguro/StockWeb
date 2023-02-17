@@ -1,6 +1,6 @@
 package com.stockweb.demo.core.usecase.impl;
 
-import com.stockweb.demo.config.NotFoundException;
+import com.stockweb.demo.config.exception.NotProductException;
 import com.stockweb.demo.core.model.ProductList;
 import com.stockweb.demo.core.model.Producto;
 import com.stockweb.demo.core.model.datetime.Fecha;
@@ -23,7 +23,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public Long createEntity(Producto producto) {
         producto.setFechaUltimoInv(Fecha.get());
-        return productRepository. save(producto).getIdProducto();
+        return productRepository.save(producto).getIdProducto();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProductoServiceImpl implements ProductoService {
                     productJpa.setStock(producto.getStock());
                     productJpa.setDescripcion(producto.getDescripcion());
                     return productRepository.save(productJpa);
-                }).orElseThrow(() -> new NotFoundException(idProducto));
+                }).orElseThrow(() -> new NotProductException(idProducto));
     }
     @Override
     @Transactional
@@ -45,7 +45,7 @@ public class ProductoServiceImpl implements ProductoService {
                     productJpa.setStock(stock);
                     productJpa.setFechaUltimoInv(Fecha.get());
                     return productRepository.save(productJpa);
-                }).orElseThrow(() -> new NotFoundException(idProducto));
+                }).orElseThrow(() -> new NotProductException(idProducto));
     }
     @Override
     @Transactional
@@ -62,6 +62,6 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public Producto findById(Long idProducto){
-        return  productRepository.findById(idProducto).orElseThrow(() -> new NotFoundException(idProducto));
+        return  productRepository.findById(idProducto).orElseThrow(() -> new NotProductException(idProducto));
     }
 }

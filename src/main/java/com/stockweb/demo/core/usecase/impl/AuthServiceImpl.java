@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public Long createEntity(Usuario usuario) {
         if (exist(usuario.getEmail())) {
-            throw new ConflictException("There is already an account with that email address: " + usuario.getEmail());
+            throw new ConflictException("Ya existe una cuenta con esa dirección de correo electrónico: " + usuario.getEmail());
         }
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuario.setRol(rolRepository.findById(id_rol).get());

@@ -47,15 +47,16 @@ public class ControllerProducto implements ApiProducto {
 
     @Override
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createProducto(@Valid @RequestBody ProductoRequest productoRequest) {
         Producto producto = mapper.productoRequestToProducto(productoRequest);
         final long idProducto = productoService.createEntity(producto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(idProducto)
+                .path("/byId/{id}").buildAndExpand(idProducto)
                 .toUri();
         return ResponseEntity.created(location).build();
-
     }
+
     @Override
     @PutMapping("/editProducto/{idProducto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

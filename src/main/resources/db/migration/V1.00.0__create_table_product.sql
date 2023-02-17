@@ -19,7 +19,8 @@ CREATE TABLE producto
 CREATE TABLE PAQUETE
 (
    id_paquete BIGINT AUTO_INCREMENT NOT NULL,
-   precio_paquete BIGINT DEFAULT 0 NOT NULL,
+   nombre_paquete VARCHAR(255) DEFAULT '-',
+   precio_paquete BIGINT DEFAULT 0,
    CONSTRAINT pk_paquete PRIMARY KEY (id_paquete)
 )engine = InnoDB;
 

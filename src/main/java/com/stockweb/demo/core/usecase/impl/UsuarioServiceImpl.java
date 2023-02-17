@@ -1,6 +1,8 @@
 package com.stockweb.demo.core.usecase.impl;
 
-import com.stockweb.demo.config.NotFoundException;
+import com.stockweb.demo.config.exception.ErrorExpected;
+import com.stockweb.demo.config.exception.NotFoundException;
+import com.stockweb.demo.config.exception.NotUserException;
 import com.stockweb.demo.core.model.Rol;
 import com.stockweb.demo.core.model.Usuario;
 import com.stockweb.demo.core.model.UsuarioList;
@@ -10,6 +12,7 @@ import com.stockweb.demo.core.usecase.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +35,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
             usuarioJpa.setPassword(passwordEncoder.encode(newPassword));
             return usuarioRepository.save(usuarioJpa);
-        }).orElseThrow(() -> new NotFoundException(idUsuario));
+        }).orElseThrow(() -> new NotUserException(idUsuario));
     }
 
     @Override
@@ -43,15 +46,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public void updateUsuarioIfExists(Long idUsuario, Usuario usuario, Long newRol) {
+    public void updateUsuarioIfExists(Long idUsuario, Usuario usuario, Long idNewRol) {
             usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
                 if (usuario.getFirstname() != null) { usuarioJpa.setFirstname(usuario.getFirstname());}
                 if (usuario.getEmail() != null) { usuarioJpa.setEmail(usuario.getEmail()); }
                 if (usuario.getLastname() != null) { usuarioJpa.setLastname(usuario.getLastname()); }
                 return usuarioRepository.save(usuarioJpa);
             });
-        if (newRol != null) {
-            Rol rol = rolRepository.findById(newRol).orElseThrow(() -> new NotFoundException(newRol));
+        if (idNewRol != null) {
+            Rol rol = rolRepository.findById(idNewRol).orElseThrow(() -> new ErrorExpected("El rol con id: "+idNewRol + "No existe", HttpStatus.NOT_FOUND));
             usuarioRepository.findById(idUsuario).map(usuarioJpa -> {
                 usuarioJpa.setRol(rol);
                 return usuarioRepository.save(usuarioJpa);
