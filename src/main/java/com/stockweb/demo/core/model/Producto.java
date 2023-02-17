@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -52,12 +53,9 @@ public class Producto  {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaUltimoInv;
 
-    @ManyToMany
-    @JoinTable(name = "producto_paquete",
-            joinColumns = @JoinColumn(name = "id_producto"),
-            inverseJoinColumns = @JoinColumn(name = "id_paquete"))
+    @ManyToMany(mappedBy = "productos")
     @ToString.Exclude
-    private Set<Paquete> paquetes = new HashSet<>();
+    private List<Paquete> paquetes;
 
 
 

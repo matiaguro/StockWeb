@@ -43,6 +43,7 @@ public class AuthController implements ApiAuth {
 
     @Override
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         Usuario usuario = usuarioControllerMapper.registerRequestToUser(request);
         authService.createEntity(usuario);

@@ -8,6 +8,8 @@ public interface ApiConstants {
     String PRODUCT_URI = "/productos";
     String USUARIOS_URI ="/usuarios";
 
+    String PAQUETE_URI = "/paquete";
+
     int DEFAULT_PAGE = 0;
     int DEFAULT_PAGE_SIZE = 10;
 
