@@ -1,6 +1,8 @@
 package com.stockweb.demo.config;
 
 
+import com.stockweb.demo.config.exception.handler.AuthenticationEntryPointHandler;
+import com.stockweb.demo.config.exception.handler.CustomAccessDeniedHandler;
 import com.stockweb.demo.config.security.JwtAuthFilter;
 import com.stockweb.demo.ports.input.rs.api.ApiConstants;
 import lombok.RequiredArgsConstructor;
@@ -41,15 +43,29 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.DELETE, ApiConstants.PRODUCT_URI + "/{idProducto}").authenticated()
             .antMatchers(HttpMethod.GET, ApiConstants.PRODUCT_URI + "/allProductos").authenticated()
             .antMatchers(HttpMethod.GET, ApiConstants.PRODUCT_URI + "/byId/{idProducto}").authenticated()
+            //Config Package
+            .antMatchers(HttpMethod.POST, ApiConstants.PAQUETE_URI).authenticated()
+            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/agregarProductos/{idPaquete}").authenticated()
+            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/sacarProductos/{idPaquete}").authenticated()
+            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/agregarProductos/{idPaquete}").authenticated()
+            .antMatchers(HttpMethod.DELETE, ApiConstants.PAQUETE_URI+"/{idPaquete}").authenticated()
+            .antMatchers(HttpMethod.GET, ApiConstants.PAQUETE_URI+"findPaquete/{idPaquete}").authenticated()
             // Default access for each Method
             .antMatchers(HttpMethod.GET).authenticated()
             .antMatchers(HttpMethod.POST).hasRole("ADMIN")
             .antMatchers(HttpMethod.PATCH).hasRole("ADMIN")
             .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT).hasRole("ADMIN")
+            // Error handling
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(new AuthenticationEntryPointHandler())
+            .accessDeniedHandler(new CustomAccessDeniedHandler())
+            // Session
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            // filters
             .and()
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
