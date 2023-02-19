@@ -31,9 +31,7 @@ public class ProductoServiceImpl implements ProductoService {
     public void updateEntityIfExists(Long idProducto, Producto producto) {
         productRepository.findById(idProducto)
                 .map(productJpa -> {
-                    productJpa.setProducto(producto.getProducto());
-                    productJpa.setStock(producto.getStock());
-                    productJpa.setDescripcion(producto.getDescripcion());
+                    setProducto(productJpa, producto);
                     return productRepository.save(productJpa);
                 }).orElseThrow(() -> new NotProductException(idProducto));
     }
@@ -63,5 +61,21 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional(readOnly = true)
     public Producto findById(Long idProducto){
         return  productRepository.findById(idProducto).orElseThrow(() -> new NotProductException(idProducto));
+    }
+
+
+    private void setProducto(Producto productJpa, Producto producto) {
+        if (!producto.getProducto().isEmpty()) {
+            productJpa.setProducto(producto.getProducto());
+        }
+        if (producto.getPrecio() != null) {
+            productJpa.setPrecio(producto.getPrecio());
+        }
+        if (!producto.getDescripcion().isEmpty()) {
+            productJpa.setDescripcion(producto.getDescripcion());
+        }
+        if (!producto.getImgUrl().isEmpty()) {
+            productJpa.setImgUrl(producto.getImgUrl());
+        }
     }
 }
