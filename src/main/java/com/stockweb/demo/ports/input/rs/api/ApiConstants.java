@@ -4,10 +4,10 @@ import java.util.function.Function;
 
 public interface ApiConstants {
 
+    String CLIENTE_URI = "/cliente";
     String AUTH_URI= "/auth";
     String PRODUCT_URI = "/productos";
     String USUARIOS_URI ="/usuarios";
-
     String PAQUETE_URI = "/paquete";
 
     int DEFAULT_PAGE = 0;
