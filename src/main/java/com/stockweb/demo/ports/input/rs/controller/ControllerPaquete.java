@@ -31,7 +31,7 @@ import static com.stockweb.demo.ports.input.rs.api.ApiConstants.PAQUETE_URI;
 @RestController
 @RequestMapping(PAQUETE_URI)
 @RequiredArgsConstructor
-public class PaqueteController implements ApiPaquete {
+public class ControllerPaquete implements ApiPaquete {
 
     @Value("${app.default.name-paquete}")
     private String defaultName;

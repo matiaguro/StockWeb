@@ -61,7 +61,7 @@ public class ControllerProducto implements ApiProducto {
     @Override
     @PutMapping("/editProducto/{idProducto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void upDateProducto(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequest productoRequest) {
+    public void upDateProducto(@NotNull @PathVariable Long idProducto, @RequestBody ProductoRequest productoRequest) {
         Producto producto = mapper.productoRequestToProducto(productoRequest);
         productoService.updateEntityIfExists(idProducto, producto);
     }
@@ -69,8 +69,7 @@ public class ControllerProducto implements ApiProducto {
     @PatchMapping("/{idProducto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void upDateStock(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequestAmount productoRequestAmount) {
-        Long stock = productoRequestAmount.getStock();
-        productoService.upDateStock(idProducto, stock);
+        productoService.upDateStock(idProducto, productoRequestAmount.getStock());
     }
     @Override
     @DeleteMapping("/{idProducto}")

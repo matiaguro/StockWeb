@@ -31,7 +31,7 @@ import static com.stockweb.demo.ports.input.rs.api.ApiConstants.AUTH_URI;
 @RestController
 @RequestMapping(AUTH_URI)
 @RequiredArgsConstructor
-public class AuthController implements ApiAuth {
+public class ControllerAuth implements ApiAuth {
 
     private final UsuarioControllerMapper usuarioControllerMapper;
     private final AuthService authService;

@@ -21,7 +21,7 @@ public interface ApiProducto {
 
     ResponseEntity<Void> createProducto(@Valid @RequestBody ProductoRequest productoRequest);
 
-    void upDateProducto(@NotNull @PathVariable Long id, @Valid @RequestBody ProductoRequest productoRequest);
+    void upDateProducto(@NotNull @PathVariable Long id,@RequestBody ProductoRequest productoRequest);
 
     void upDateStock(@NotNull @PathVariable Long id, @Valid @RequestBody ProductoRequestAmount productoRequestAmount);
 
