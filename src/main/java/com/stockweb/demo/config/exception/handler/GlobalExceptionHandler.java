@@ -51,7 +51,7 @@ public final class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotProductException.class)
-    private ResponseEntity<ErrorDetails> handleNotProduct(NotPackage ex) {
+    private ResponseEntity<ErrorDetails> handleNotProduct(NotProductException ex) {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_NOT_FOUND)

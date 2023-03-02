@@ -21,7 +21,4 @@ public class PaqueteResponse {
     @JsonProperty("nombrePaquete")
     private String nombrePaquete;
 
-    @JsonProperty("precioPaquete")
-    private Long precioPaquete;
-
 }

@@ -41,4 +41,6 @@ public class ProductoResponse {
 
     @JsonProperty("imgUrl")
     private String imgUrl;
+
+
 }

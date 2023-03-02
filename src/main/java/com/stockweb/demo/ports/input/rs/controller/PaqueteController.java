@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static com.stockweb.demo.ports.input.rs.api.ApiConstants.PAQUETE_URI;
@@ -50,15 +51,16 @@ public class PaqueteController implements ApiPaquete {
     @Override
     @PatchMapping("/agregarProductos/{idPaquete}")
     @ResponseStatus(HttpStatus.OK)
-    public void sumarProductoPaquete(@NotNull  @PathVariable Long idPaquete, @RequestBody PaqueteProductoRequest paqueteProductoRequest) throws Exception {
-        paqueteService.agregarProducto(idPaquete ,paqueteProductoRequest);
+    public void sumarProductoPaquete(@NotNull  @PathVariable Long idPaquete,@Valid @RequestBody PaqueteProductoRequest paqueteRequest) throws Exception {
+        paqueteService.agregarProducto(idPaquete,paqueteRequest.getProductos());
+
     }
 
     @Override
-    @PatchMapping("/sacarProductos/{idPaquete}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sacarProductoPaquete(@NotNull  @PathVariable Long idPaquete, @RequestBody PaqueteProductoRequest paqueteProductoRequest) {
-        paqueteService.sacarProducto(idPaquete ,paqueteProductoRequest);
+    @DeleteMapping("/sacarProductos/{idPaquete}")
+    @ResponseStatus(HttpStatus.OK)
+    public void sacarProductoPaquete(@NotNull  @PathVariable Long idPaquete, @RequestBody PaqueteProductoRequest paqueteRequest) {
+        paqueteService.sacarProducto(idPaquete, paqueteRequest.getProductos());
     }
 
     @Override
@@ -70,8 +72,7 @@ public class PaqueteController implements ApiPaquete {
     @Override
     @GetMapping("findPaquete/{idPaquete}")
     public ResponseEntity<PaqueteProductoResponse> findPaquete(Long idPaquete) {
-        Paquete paquete = paqueteService.findByid(idPaquete);
-        PaqueteProductoResponse response = mapper.paqueteToPaqueteProductoResponse(paquete);
+        PaqueteProductoResponse response = mapper.paqueteToPaqueteProductoResponse(paqueteService.findByid(idPaquete));
         return ResponseEntity.ok().body(response);
     }
 }

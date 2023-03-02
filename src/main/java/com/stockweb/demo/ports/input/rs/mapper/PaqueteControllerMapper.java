@@ -12,7 +12,11 @@ import org.mapstruct.Mapper;
 public interface PaqueteControllerMapper extends CommonMapper {
 
    PaqueteResponse paqueteToPaqueteResponse (Paquete paquete);
+
    Paquete paqueteRequestToPaquete (PaqueteRequest paqueteRequest);
 
+
    PaqueteProductoResponse paqueteToPaqueteProductoResponse(Paquete paquete);
+
+
 }

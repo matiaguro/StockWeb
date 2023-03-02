@@ -13,42 +13,50 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.List;
 import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "paquete")
-public class Paquete {
-
+@Table(name = "desc_paquete")
+public class DescPaquete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_paquete")
-    private Long idPaquete;
+    @Column(name = "id_desc_paquete")
+    private Long idDescPaquete;
 
-    @Column (name = "nombre_paquete", columnDefinition = "varchar(100) default Paquete")
-    private String nombrePaquete;
+    @Column(name = "cantidad")
+    private Long cantidad;
 
-    @OneToMany(mappedBy = "paquete", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_paquete")
     @ToString.Exclude
-    private List<DescPaquete> descPaqueteList;
+    private Paquete paquete;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @ToString.Exclude
+    private Producto producto;
+
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Paquete paquete = (Paquete) o;
-        return Objects.equals(idPaquete, paquete.idPaquete);
+        DescPaquete descPaquete = (DescPaquete) o;
+        return Objects.equals(idDescPaquete, descPaquete.idDescPaquete);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPaquete);
+        return Objects.hash(idDescPaquete);
     }
 
 
