@@ -36,7 +36,6 @@ public class ControllerPaquete implements ApiPaquete {
     @Value("${app.default.name-paquete}")
     private String defaultName;
     private final PaqueteControllerMapper mapper;
-
     private final PaqueteService paqueteService;
 
     @Override
@@ -53,26 +52,33 @@ public class ControllerPaquete implements ApiPaquete {
     @ResponseStatus(HttpStatus.OK)
     public void sumarProductoPaquete(@NotNull  @PathVariable Long idPaquete,@Valid @RequestBody PaqueteProductoRequest paqueteRequest) throws Exception {
         paqueteService.agregarProducto(idPaquete,paqueteRequest.getProductos());
-
     }
 
     @Override
     @DeleteMapping("/sacarProductos/{idPaquete}")
     @ResponseStatus(HttpStatus.OK)
-    public void sacarProductoPaquete(@NotNull  @PathVariable Long idPaquete, @RequestBody PaqueteProductoRequest paqueteRequest) {
+    public void sacarProductoPaquete(@NotNull  @PathVariable Long idPaquete,@Valid @RequestBody PaqueteProductoRequest paqueteRequest) {
         paqueteService.sacarProducto(idPaquete, paqueteRequest.getProductos());
     }
 
     @Override
+    @PatchMapping("/modCantidad/{idPaquete}")
+    @ResponseStatus(HttpStatus.OK)
+    public void modCantidad(@NotNull  @PathVariable Long idPaquete,@Valid @RequestBody PaqueteProductoRequest paqueteRequest) {
+        paqueteService.modCantidad(idPaquete, paqueteRequest.getProductos());
+    }
+
+    @Override
     @DeleteMapping("/{idPaquete}")
-    public void deletePaquete(@PathVariable  Long idPaquete) {
+    public void deletePaquete(@NotNull @PathVariable  Long idPaquete) {
         paqueteService.deletePaquete(idPaquete);
     }
 
     @Override
     @GetMapping("findPaquete/{idPaquete}")
-    public ResponseEntity<PaqueteProductoResponse> findPaquete(Long idPaquete) {
-        PaqueteProductoResponse response = mapper.paqueteToPaqueteProductoResponse(paqueteService.findByid(idPaquete));
+    public ResponseEntity<PaqueteProductoResponse> findPaquete(@NotNull @PathVariable  Long idPaquete) {
+        PaqueteProductoResponse response = paqueteService.findByid(idPaquete);
         return ResponseEntity.ok().body(response);
     }
+
 }

@@ -2,6 +2,7 @@ package com.stockweb.demo.core.usecase;
 
 import com.stockweb.demo.core.model.Paquete;
 import com.stockweb.demo.ports.input.rs.request.paquete.AddOrRemoveProductRequest;
+import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteProductoResponse;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface PaqueteService {
 
     void deletePaquete(Long idPaquete);
 
-    Paquete findByid (Long idPaquete);
+    PaqueteProductoResponse findByid (Long idPaquete);
+
+    void modCantidad (Long idPaquete,  List<AddOrRemoveProductRequest> paqueteRequest);
 }

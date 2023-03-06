@@ -20,6 +20,8 @@ public interface ApiPaquete {
 
     void deletePaquete(@NotNull @PathVariable Long idPaquete);
 
+    void modCantidad(@NotNull  @PathVariable Long idPaquete, @RequestBody PaqueteProductoRequest paqueteRequest);
+
     ResponseEntity<PaqueteProductoResponse>findPaquete (@PathVariable Long idPaquete);
 
 }
