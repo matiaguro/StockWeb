@@ -17,7 +17,6 @@ public interface UsuarioControllerMapper extends CommonMapper{
     Usuario registerRequestToUser(RegisterRequest request);
 
     @IterableMapping(qualifiedByName = "usuarioToResponseUsuario")
-
     List<UsuarioResponse> usuarioListaToUsuarioResponseList(List<Usuario> usuarios);
 
 

@@ -10,7 +10,10 @@ import com.stockweb.demo.core.repository.DescPaqueteRepository;
 import com.stockweb.demo.core.repository.PaqueteRepository;
 import com.stockweb.demo.core.repository.ProductoRepository;
 import com.stockweb.demo.core.usecase.PaqueteService;
+import com.stockweb.demo.ports.input.rs.mapper.PaqueteControllerMapper;
 import com.stockweb.demo.ports.input.rs.request.paquete.AddOrRemoveProductRequest;
+import com.stockweb.demo.ports.input.rs.request.paquete.DescPaqueteResponse;
+import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteProductoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,8 @@ public class PaqueteServiceImpl implements PaqueteService {
     private final ProductoRepository productoRepository;
 
     private final DescPaqueteRepository descPaqueteRepository;
+
+    private final PaqueteControllerMapper mapper;
 
     @Override
     @Transactional
@@ -58,12 +63,21 @@ public class PaqueteServiceImpl implements PaqueteService {
         Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
         for(AddOrRemoveProductRequest addProduct : paqueteRequest){
             Producto producto = productoRepository.findById(addProduct.getIdProducto()).orElseThrow(() -> new NotProductException(addProduct.getIdProducto()));
-            if (descPaqueteRepository.existsByPaqueteAndProducto(paquete,producto)){
-                DescPaquete descPaquete = descPaqueteRepository.findByPaqueteAndProducto(paquete,producto);
+                DescPaquete descPaquete = descPaqueteRepository.findByPaqueteAndProducto(paquete,producto).orElseThrow(() -> new ErrorExpected("El producto de id: "+producto.getIdProducto()+" no se encuentra dentro del paquete con id: "+paquete.getIdPaquete(), HttpStatus.BAD_REQUEST));
                 descPaqueteRepository.deleteById(descPaquete.getIdDescPaquete());
-            }else {
-                throw new ErrorExpected("El producto de id: "+producto.getIdProducto()+" no se encuentra dentro del paquete con id: "+paquete.getIdPaquete(), HttpStatus.BAD_REQUEST);
-            }
+        }
+    }
+
+    @Override
+    @Transactional
+    public void modCantidad(Long idPaquete, List<AddOrRemoveProductRequest> paqueteRequest) {
+        Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+        for(AddOrRemoveProductRequest modProduct : paqueteRequest){
+            Producto producto = productoRepository.findById(modProduct.getIdProducto()).orElseThrow(() -> new NotProductException(modProduct.getIdProducto()));
+            descPaqueteRepository.findByPaqueteAndProducto(paquete,producto).map(modProductJpa -> {
+                modProductJpa.setCantidad(modProduct.getCantidad());
+                return descPaqueteRepository.save(modProductJpa);
+            }).orElseThrow(() ->new ErrorExpected("El producto de id: "+producto.getIdProducto()+" no se encuentra dentro del paquete con id: "+paquete.getIdPaquete(), HttpStatus.BAD_REQUEST));
         }
 
     }
@@ -75,9 +89,15 @@ public class PaqueteServiceImpl implements PaqueteService {
     }
 
     @Override
-    public Paquete findByid(Long idPaquete) {
-        return paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+    @Transactional (readOnly = true)
+    public PaqueteProductoResponse findByid(Long idPaquete) {
+        Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+        PaqueteProductoResponse paqueteProductoResponse = mapper.paqueteToPaqueteProductoResponse(paquete);
+        long precio = 0;
+        for (DescPaqueteResponse desc : paqueteProductoResponse.getProductos()){
+            precio += desc.getProducto().getPrecio() * desc.getCantidad();
+        }
+        paqueteProductoResponse.setPrecioPaquete(precio);
+         return paqueteProductoResponse;
     }
-
-
 }
