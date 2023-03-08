@@ -5,6 +5,7 @@ import com.stockweb.demo.core.model.Cliente;
 import com.stockweb.demo.core.model.ClienteList;
 import com.stockweb.demo.core.repository.ClienteRepository;
 import com.stockweb.demo.core.usecase.ClienteService;
+import com.stockweb.demo.ports.input.rs.request.cliente.ClienteRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,13 +33,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void updateEntityIfExists(Long idCliente, Cliente cliente) {
+    public void updateEntityIfExists(Long idCliente, ClienteRequest clienteRequest) {
 
         clienteRepository.findById(idCliente).
                 map(clienteJpa ->{
-                    clienteJpa.setFirstname(cliente.getFirstname());
-                    clienteJpa.setLastname(cliente.getLastname());
-                    clienteJpa.setEmail(cliente.getEmail());
+                    clienteJpa.setFirstname(clienteRequest.getFirstname());
+                    clienteJpa.setLastname(clienteRequest.getLastname());
+                    clienteJpa.setEmail(clienteRequest.getEmail());
                     return  clienteRepository.save(clienteJpa);
                 }).orElseThrow(() -> new NotClientException(idCliente));
 

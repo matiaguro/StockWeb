@@ -2,7 +2,7 @@ package com.stockweb.demo.core.usecase;
 
 import com.stockweb.demo.core.model.Cliente;
 import com.stockweb.demo.core.model.ClienteList;
-import com.stockweb.demo.core.model.Producto;
+import com.stockweb.demo.ports.input.rs.request.cliente.ClienteRequest;
 import org.springframework.data.domain.PageRequest;
 
 public interface ClienteService {
@@ -11,7 +11,7 @@ public interface ClienteService {
 
     void deleteById(Long idCliente);
 
-    void updateEntityIfExists(Long idCliente, Cliente cliente);
+    void updateEntityIfExists(Long idCliente, ClienteRequest clienteRequest);
 
     ClienteList getLista(PageRequest pageRequest);
 

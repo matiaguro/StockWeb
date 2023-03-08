@@ -1,5 +1,6 @@
 package com.stockweb.demo.ports.input.rs.api;
 
+import com.stockweb.demo.core.model.Cliente;
 import com.stockweb.demo.ports.input.rs.request.cliente.ClienteRequest;
 import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequest;
 import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequestAmount;
@@ -21,7 +22,7 @@ import java.util.Optional;
 public interface ApiCliente {
     ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteRequest ClienteRequest);
 
-    void upDateCliente(@NotNull @PathVariable Long id, @Valid @RequestBody ClienteRequest clienteRequest);
+    void upDateCliente(@NotNull @PathVariable Long idCliente, @Valid @RequestBody ClienteRequest clienteRequest);
 
     void DeleteCliente(@NotNull @PathVariable Long idCliente);
 

@@ -37,19 +37,11 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.PATCH,ApiConstants.USUARIOS_URI +"/editUsuario/{idUsuario}" ).hasRole("ADMIN")
             .antMatchers(HttpMethod.GET,ApiConstants.USUARIOS_URI +"getAllUsuarios").hasRole("ADMIN")
             //Config Product
-            .antMatchers(HttpMethod.POST, ApiConstants.PRODUCT_URI ).authenticated()
-            .antMatchers(HttpMethod.PUT, ApiConstants.PRODUCT_URI + "/editProducto/{idProducto}").authenticated()
-            .antMatchers(HttpMethod.PATCH, ApiConstants.PRODUCT_URI + "/{idProducto}" ).authenticated()
-            .antMatchers(HttpMethod.DELETE, ApiConstants.PRODUCT_URI + "/{idProducto}").authenticated()
-            .antMatchers(HttpMethod.GET, ApiConstants.PRODUCT_URI + "/allProductos").authenticated()
-            .antMatchers(HttpMethod.GET, ApiConstants.PRODUCT_URI + "/byId/{idProducto}").authenticated()
+            .antMatchers( ApiConstants.PRODUCT_URI + "/**").authenticated()
             //Config Package
-            .antMatchers(HttpMethod.POST, ApiConstants.PAQUETE_URI).authenticated()
-            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/agregarProductos/{idPaquete}").authenticated()
-            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/sacarProductos/{idPaquete}").authenticated()
-            .antMatchers(HttpMethod.PATCH, ApiConstants.PAQUETE_URI+"/agregarProductos/{idPaquete}").authenticated()
-            .antMatchers(HttpMethod.DELETE, ApiConstants.PAQUETE_URI+"/{idPaquete}").authenticated()
-            .antMatchers(HttpMethod.GET, ApiConstants.PAQUETE_URI+"findPaquete/{idPaquete}").authenticated()
+            .antMatchers( ApiConstants.PAQUETE_URI + "/**").authenticated()
+            //Config Cliente
+            .antMatchers(ApiConstants.CLIENTE_URI + "/**").authenticated()
             // Default access for each Method
             .antMatchers(HttpMethod.GET).authenticated()
             .antMatchers(HttpMethod.POST).hasRole("ADMIN")

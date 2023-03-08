@@ -1,14 +1,11 @@
 package com.stockweb.demo.config.exception.handler;
 
-import com.stockweb.demo.config.exception.ConflictException;
-import com.stockweb.demo.config.exception.ErrorExpected;
-import com.stockweb.demo.config.exception.NotFoundException;
-import com.stockweb.demo.config.exception.NotPackage;
-import com.stockweb.demo.config.exception.NotProductException;
+import com.stockweb.demo.config.exception.*;
 import com.stockweb.demo.config.exception.error.ErrorCode;
 import com.stockweb.demo.config.exception.error.ErrorConstraint;
 import com.stockweb.demo.config.exception.error.ErrorDetails;
 import com.stockweb.demo.config.exception.error.ErrorLocation;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -22,6 +19,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @ControllerAdvice
 public final class GlobalExceptionHandler {
@@ -109,6 +107,19 @@ public final class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         return null;
+    }
+
+
+    @ExceptionHandler(NotClientException.class)
+    private  ResponseEntity<ErrorDetails> handleNotClient (NotClientException ex){
+
+        ErrorDetails error = ErrorDetails.builder()
+                .code(ErrorCode.RESOURCE_NOT_FOUND)
+                .location(ErrorLocation.PATH)
+                .detail("No se encontro el cliente con el id: %s".formatted(ex.getResourceId()))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
 
