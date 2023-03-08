@@ -6,12 +6,22 @@ import com.stockweb.demo.config.exception.NotFoundException;
 import com.stockweb.demo.config.exception.NotPackage;
 import com.stockweb.demo.config.exception.NotProductException;
 import com.stockweb.demo.config.exception.error.ErrorCode;
+import com.stockweb.demo.config.exception.error.ErrorConstraint;
 import com.stockweb.demo.config.exception.error.ErrorDetails;
 import com.stockweb.demo.config.exception.error.ErrorLocation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public final class GlobalExceptionHandler {
@@ -72,6 +82,33 @@ public final class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(ex.getStatus()).body(error);
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    private ResponseEntity<ErrorConstraint> handleErrorConstrain(ConstraintViolationException ex) {
+        ErrorConstraint errores = new ErrorConstraint();
+        for (ConstraintViolation violation : ex.getConstraintViolations()){
+            ErrorDetails error = ErrorDetails.builder()
+                    .code(ErrorCode.EXPECTED_FAILURE)
+                    .detail(violation.getMessage())
+                    .build();
+            errores.getErrores().add(error);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    private ResponseEntity<ErrorDetails> handleErrorArgumentConstrain(MethodArgumentNotValidException ex) {
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()){
+            ErrorDetails error = ErrorDetails.builder()
+                    .code(ErrorCode.EXPECTED_FAILURE)
+                    .detail(fieldError.getDefaultMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+        return null;
     }
 
 
