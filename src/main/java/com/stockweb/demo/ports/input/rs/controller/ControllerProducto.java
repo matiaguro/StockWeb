@@ -59,21 +59,21 @@ public class ControllerProducto implements ApiProducto {
     }
 
     @Override
-    @PutMapping("/editProducto/{idProducto}")
+    @PutMapping("/upDateProducto/{idProducto}")
     @ResponseStatus(HttpStatus.OK)
     public void upDateProducto(@NotNull @PathVariable Long idProducto, @RequestBody ProductoRequest productoRequest) {
         Producto producto = mapper.productoRequestToProducto(productoRequest);
         productoService.updateEntityIfExists(idProducto, producto);
     }
     @Override
-    @PatchMapping("/{idProducto}")
+    @PatchMapping("/upDateStock/{idProducto}")
     @ResponseStatus(HttpStatus.OK)
     public void upDateStock(@NotNull @PathVariable Long idProducto, @Valid @RequestBody ProductoRequestAmount productoRequestAmount) {
         productoService.upDateStock(idProducto, productoRequestAmount.getStock());
     }
     @Override
-    @DeleteMapping("/{idProducto}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/deleteProducto/{idProducto}")
+    @ResponseStatus(HttpStatus.OK)
     public void DeleteProducto(@NotNull @PathVariable Long idProducto){
         productoService.deleteById(idProducto);
 
@@ -82,7 +82,7 @@ public class ControllerProducto implements ApiProducto {
     @Override
     @GetMapping("/allProductos")
     public ResponseEntity<ProductoResponseLista> getAllProductos(@RequestParam Optional<Integer> page,
-                                                            @RequestParam Optional<Integer> size) {
+                                                                @RequestParam Optional<Integer> size) {
 
        final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
        final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
@@ -104,6 +104,7 @@ public class ControllerProducto implements ApiProducto {
            response.setTotalPages(list.getTotalPages());
            response.setTotalElements(list.getTotalElements());}
        return ResponseEntity.ok().body(response);}
+
     @Override
     @GetMapping("/byId/{idProducto}")
     public ResponseEntity<ProductoResponse> findById(@NotNull @PathVariable Long idProducto) {
