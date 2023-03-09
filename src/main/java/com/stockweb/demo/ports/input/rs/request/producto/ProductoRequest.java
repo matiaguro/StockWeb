@@ -16,15 +16,15 @@ import java.util.Date;
 @AllArgsConstructor
 public class ProductoRequest {
 
-    @NotBlank(message = "Producto cannot be null")
+    @NotBlank(message = "El producto no puede ser nulo")
     @JsonProperty("producto")
     private String producto;
 
-    @NotNull(message = "Stock cannot be null")
+    @NotNull(message = "El stock no puede ser nulo")
     @JsonProperty("stock")
     private Long stock;
 
-    @NotNull(message = "Precio cannot be null")
+    @NotNull(message = "El precio no puede ser nulo")
     @JsonProperty("precio")
     private Long precio;
 
