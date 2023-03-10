@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.mapstruct.Mapping;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -47,6 +46,9 @@ public class Orden {
     @Column (name = "precio_total")
     private float precioTotal;
 
+    @Column (name = "descripcion")
+    private String descripcion;
+
     @Column (name = "fecha_generada", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaGenerada;
@@ -54,6 +56,10 @@ public class Orden {
     @Column (name = "fecha_finalizada")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaFinalizada;
+
+    @Column (name = "fecha_modificacion")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date fechaModificacion;
 
 
     @Override

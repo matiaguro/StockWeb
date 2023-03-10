@@ -7,3 +7,6 @@ insert into ESTADO_ORDEN(clave_estado,desc_estado) values ("PAGADA","Orden pagad
 insert into ESTADO_ORDEN(clave_estado,desc_estado) values ("FINALIZADA","Orden cerrada");
 
 insert into ESTADO_ORDEN(clave_estado,desc_estado) values ("CANCELADA","Orden cancelada");
+
+insert into ESTADO_ORDEN(clave_estado,desc_estado) values ("DEVOLUCION","Orden en devolucion");
+
