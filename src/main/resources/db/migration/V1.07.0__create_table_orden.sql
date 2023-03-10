@@ -6,7 +6,6 @@ CREATE TABLE ORDEN
     id_usuario BIGINT NOT NULL,
     id_cliente BIGINT NOT NULL,
     id_estado BIGINT NOT NULL,
-    id_paquete BIGINT,
     precio_total FLOAT,
     fecha_generada datetime NOT NULL,
     fecha_finalizada datetime,
