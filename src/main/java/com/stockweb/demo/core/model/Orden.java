@@ -39,10 +39,10 @@ public class Orden {
     @ToString.Exclude
     private EstadoOrden estadoOrden;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn(name="id_paquete", nullable = false)
+    @OneToMany (fetch = FetchType.EAGER)
+    @JoinColumn(name="id_paquete")
     @ToString.Exclude
-    private Paquete paquete;
+    private List<Paquete> paquetes;
 
     @Column (name = "precio_total")
     private float precioTotal;
