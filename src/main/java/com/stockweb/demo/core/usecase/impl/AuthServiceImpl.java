@@ -1,12 +1,15 @@
 package com.stockweb.demo.core.usecase.impl;
 
 import com.stockweb.demo.config.exception.ConflictException;
+import com.stockweb.demo.config.exception.NotUserException;
 import com.stockweb.demo.core.model.Usuario;
 import com.stockweb.demo.core.repository.RolRepository;
 import com.stockweb.demo.core.repository.UsuarioRepository;
 import com.stockweb.demo.core.usecase.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,12 @@ public class AuthServiceImpl implements AuthService {
 
     private Boolean exist(String email) {
         return usuarioRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Usuario getUser (){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return usuarioRepository.findByEmail(auth.getName()).orElseThrow(() -> new NotUserException(auth.getName()));
     }
 
 }

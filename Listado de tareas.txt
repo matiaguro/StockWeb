@@ -11,28 +11,45 @@ Se crea nueva orden para un cliente con el respectivo user, fecha del dia, preci
 
 La orden no puede salir del estado generada si tiene:
         Paquetes con contenido vacio
-        Al menos un paquete obvio con contenido
-
-Se le da al cliente la posibilidad de adelantar un 20% del pago (insertar columna para guardar este monto)
-
-
-
+        Al menos un paquete, obvio con contenido
+        un precio total
+        cliente asignado
+        usuario asignado
 
 
+Se le da al cliente la posibilidad de adelantar un %40 del total a pagar (insertar columna para guardar este monto)
+    cambios en la orden:
+        cambio de estado a adelanto
+        se resta el stock en productos
 
 
+Caso de pagada
+        Se resta el stock al cliente
+        Se valida que la orden no este en Estado ADELANTO para no restar dos veces el stock
+        cambio de estado a PAGADA
+        (futuro envio de mail automatico con factura de la compra[investigar sendGrid])
 
 
-
-
-
-
-
-
-
-
-
+caso finalizada
+        para cambiar el estado de la orden a finalizada la orden debe estar previamente en estado de pagada
+        (futuro envio de mail automatico dando a entender q el paquete esta en recorrido de entrega [investigar sendGrid])
+        cambiar estado a finalizada
 
 
 
 Opcion de Cancelar la orden
+    si la orden esta en estado finalizada no hay posibilidad de vuelta a tras solo es posible realizar una cancelacion de una orden si esta en
+        GENERADA
+        ADELANTO
+        PAGADA
+
+    devolver stock de los productos
+    cambiar el estado a cancelada
+
+Opcion de DEVOLUCION debera ser posible que se realice una devolucion de una orden (agregar columna a orden de descripcion asi se puede aclarar el motivo de la devolucion)
+
+    solo sera posible si la orden estaba en estado de FINALIZADA
+    se devuelve el stock de los productos
+    se settea la descripcion
+    cambio de estado a la orden DEVOLUCION
+
