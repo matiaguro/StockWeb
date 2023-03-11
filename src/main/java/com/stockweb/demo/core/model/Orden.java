@@ -1,11 +1,8 @@
 package com.stockweb.demo.core.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import lombok.Builder;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +10,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "orden")

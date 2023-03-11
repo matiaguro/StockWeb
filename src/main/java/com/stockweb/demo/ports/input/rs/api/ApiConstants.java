@@ -5,6 +5,7 @@ import java.util.function.Function;
 public interface ApiConstants {
 
     String CLIENTE_URI = "/cliente";
+    String ORDEN_URI = "/orden";
     String AUTH_URI= "/auth";
     String PRODUCT_URI = "/productos";
     String USUARIOS_URI ="/usuarios";
