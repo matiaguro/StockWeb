@@ -16,7 +16,7 @@ public class AuthenticationResponse {
 
     private String token;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ", timezone = "GMT-3")
     Date expirationDate;
 
 }

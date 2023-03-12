@@ -35,7 +35,7 @@ public class Producto  {
     private Long stock;
 
     @Column (nullable = false,name = "precio", columnDefinition = "bigint default 0")
-    private Long precio;
+    private Float precio;
 
     @Column (nullable = false,name = "img_url", columnDefinition = "varchar(255) default -")
     private String imgUrl;

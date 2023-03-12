@@ -38,9 +38,7 @@ public class Orden {
     @ToString.Exclude
     private EstadoOrden estadoOrden;
 
-    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name="id_paquete")
-    @ToString.Exclude
+    @OneToMany (mappedBy = "orden")
     private List<Paquete> paquetes;
 
     @Column (name = "precio_total")

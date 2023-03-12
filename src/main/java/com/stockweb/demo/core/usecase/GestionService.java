@@ -6,4 +6,6 @@ public interface GestionService {
 
     void setPaqueteOrden (Long idOrden, List<Long> paquetes);
 
+    void actualizarOrden(Long idOrden);
+
 }

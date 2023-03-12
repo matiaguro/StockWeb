@@ -40,10 +40,8 @@ public class Paquete {
     @ToString.Exclude
     private List<DescPaquete> descPaqueteList;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_orden")
-    @ToString.Exclude
     private Orden orden;
 
     @Override

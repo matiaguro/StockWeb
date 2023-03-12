@@ -26,6 +26,6 @@ public class OrdenResponse {
     private String claveEstado;
 
     @JsonProperty ("fecha_generada")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ",timezone = "GMT-3")
     private Date fechaGenerada;
 }
