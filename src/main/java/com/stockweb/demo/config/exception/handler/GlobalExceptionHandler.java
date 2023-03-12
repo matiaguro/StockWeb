@@ -1,11 +1,16 @@
 package com.stockweb.demo.config.exception.handler;
 
-import com.stockweb.demo.config.exception.*;
+import com.stockweb.demo.config.exception.ConflictException;
+import com.stockweb.demo.config.exception.ErrorExpected;
+import com.stockweb.demo.config.exception.NotClientException;
+import com.stockweb.demo.config.exception.NotFoundException;
+import com.stockweb.demo.config.exception.NotOrdenException;
+import com.stockweb.demo.config.exception.NotPackage;
+import com.stockweb.demo.config.exception.NotProductException;
+import com.stockweb.demo.config.exception.NotUserException;
 import com.stockweb.demo.config.exception.error.ErrorCode;
 import com.stockweb.demo.config.exception.error.ErrorConstraint;
 import com.stockweb.demo.config.exception.error.ErrorDetails;
-import com.stockweb.demo.config.exception.error.ErrorLocation;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,8 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @ControllerAdvice
@@ -50,7 +53,6 @@ public final class GlobalExceptionHandler {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_NOT_FOUND)
-                .location(ErrorLocation.PATH)
                 .detail("No se encontro el paquete con el id:  %s".formatted(ex.getResourceId()))
                 .value("Id Paquete: "+ex.getResourceId())
                 .build();
@@ -62,7 +64,6 @@ public final class GlobalExceptionHandler {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_NOT_FOUND)
-                .location(ErrorLocation.PATH)
                 .detail("No se encontro el usuario con el email:  %s".formatted(ex.getResourceId()))
                 .value("Id Paquete: "+ex.getResourceId())
                 .build();
@@ -76,7 +77,6 @@ public final class GlobalExceptionHandler {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_NOT_FOUND)
-                .location(ErrorLocation.PATH)
                 .detail("No se encontro el producto con el id:  %s".formatted(ex.getResourceId()))
                 .value("Id Paquete: "+ex.getResourceId())
                 .build();
@@ -128,8 +128,18 @@ public final class GlobalExceptionHandler {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_NOT_FOUND)
-                .location(ErrorLocation.PATH)
                 .detail("No se encontro el cliente con el id: %s".formatted(ex.getResourceId()))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(NotOrdenException.class)
+    private  ResponseEntity<ErrorDetails> handleNotOrden (NotOrdenException ex){
+
+        ErrorDetails error = ErrorDetails.builder()
+                .code(ErrorCode.RESOURCE_NOT_FOUND)
+                .detail("No se encontro la orden con el id: %s".formatted(ex.getIdOrden()))
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
