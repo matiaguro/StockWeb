@@ -33,31 +33,34 @@ public class Orden {
     @ToString.Exclude
     private Cliente cliente;
 
-    @OneToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "id_estado", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_estado", nullable = false)
     @ToString.Exclude
     private EstadoOrden estadoOrden;
 
-    @OneToMany (mappedBy = "orden")
+    @OneToMany(mappedBy = "orden")
     private List<Paquete> paquetes;
 
-    @Column (name = "precio_total")
+    @Column(name = "precio_total")
     private float precioTotal;
 
-    @Column (name = "descripcion")
+    @Column(name = "descripcion")
     private String descripcion;
 
-    @Column (name = "fecha_generada", nullable = false)
+    @Column(name = "fecha_generada", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaGenerada;
 
-    @Column (name = "fecha_finalizada")
+    @Column(name = "fecha_finalizada")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaFinalizada;
 
-    @Column (name = "fecha_modificacion")
+    @Column(name = "fecha_modificacion")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaModificacion;
+
+    @Column(name = "adelanto")
+    private Boolean adelanto;
 
 
     @Override
@@ -72,4 +75,35 @@ public class Orden {
     public int hashCode() {
         return Objects.hash(idOrden);
     }
+
+    //si da true tiene contenido si da false esta vacio
+    public boolean validarContenido() {
+
+        if(!paquetes.isEmpty()){
+
+            for (Paquete paquete : paquetes) {
+                if (paquete.getDescPaqueteList().isEmpty()){
+                    return true;
+
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

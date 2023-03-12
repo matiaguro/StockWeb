@@ -1,7 +1,9 @@
 package com.stockweb.demo.ports.input.rs.controller;
 
+import com.stockweb.demo.config.exception.ErrorExpected;
 import com.stockweb.demo.core.usecase.GestionService;
 import com.stockweb.demo.ports.input.rs.api.ApiGestion;
+import com.stockweb.demo.ports.input.rs.request.gestion.CambioEstadoRequest;
 import com.stockweb.demo.ports.input.rs.request.gestion.SetPaqueteRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,5 +38,21 @@ public class ControllerGestion  implements ApiGestion {
     @ResponseStatus(HttpStatus.OK)
     public void setPaqueteOrden(@NotNull @PathVariable Long idOrden) {
         gestionService.actualizarOrden(idOrden);
+    }
+
+    @Override
+    @PatchMapping("/cambioEstado")
+    @ResponseStatus(HttpStatus.OK)
+    public void cambioEstado(@Valid @RequestBody CambioEstadoRequest request) {
+
+        switch (request.getNuevoEstado()) {
+            case "ADELANTO" -> gestionService.setAdelanto(request.getIdOrden());
+            case "PAGADA" -> throw new ErrorExpected("PAGADA", HttpStatus.OK);
+            case "FINALIZADA" -> throw new ErrorExpected("FINALIZADA", HttpStatus.OK);
+            default -> throw new ErrorExpected("Estado no contemplado", HttpStatus.BAD_REQUEST);
+        }
+
+
+
     }
 }
