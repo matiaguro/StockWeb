@@ -7,4 +7,6 @@ public interface OrdenService {
 
     Orden createOrden (OrdenRequest ordenRequest);
 
+    Orden deleteOrden (Long idOrden);
+
 }

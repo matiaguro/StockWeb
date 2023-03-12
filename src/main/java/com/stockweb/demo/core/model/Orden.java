@@ -38,7 +38,7 @@ public class Orden {
     @ToString.Exclude
     private EstadoOrden estadoOrden;
 
-    @OneToMany (fetch = FetchType.EAGER)
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name="id_paquete")
     @ToString.Exclude
     private List<Paquete> paquetes;

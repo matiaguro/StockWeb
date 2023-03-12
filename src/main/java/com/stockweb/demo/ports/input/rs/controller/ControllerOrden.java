@@ -29,12 +29,22 @@ public class ControllerOrden implements ApiOrden {
 
         Orden orden = ordenService.createOrden(ordenRequest);
         OrdenResponse ordenResponse = OrdenResponse.builder()
-                .nombreUsuario(orden.getUsuario().getFirstname() + orden.getUsuario().getLastname())
+                .nombreUsuario(orden.getUsuario().getFirstname() + " " + orden.getUsuario().getLastname())
                 .claveEstado(orden.getEstadoOrden().getClaveEstado())
-                .nombreCliente(orden.getCliente().getFirstname() + orden.getCliente().getLastname())
+                .nombreCliente(orden.getCliente().getFirstname() + " " + orden.getCliente().getLastname())
                 .fechaGenerada(orden.getFechaGenerada()).build();
 
         return ResponseEntity.ok().body(ordenResponse);
+    }
+
+    @Override
+    @DeleteMapping ("/{idOrden}")
+    @ResponseStatus (HttpStatus.OK)
+    public void deleteOrden(Long idOrden) {
+
+        Orden orden = ordenService.deleteOrden(idOrden);
+
+
     }
 
 

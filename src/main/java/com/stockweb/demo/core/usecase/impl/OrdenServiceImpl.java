@@ -41,5 +41,13 @@ public class OrdenServiceImpl implements OrdenService {
                 .usuario(authService.getUser())
                 .build()
         );
+
+
+    }
+
+    @Override
+    public Orden deleteOrden(Long idOrden) {
+        ordenRepository.deleteById(idOrden);
+        return null;
     }
 }
