@@ -36,7 +36,7 @@ public class ControllerGestion  implements ApiGestion {
     @Override
     @PatchMapping("/actualizarOrden/{idOrden}")
     @ResponseStatus(HttpStatus.OK)
-    public void setPaqueteOrden(@NotNull @PathVariable Long idOrden) {
+    public void actualizarOrden(@NotNull @PathVariable Long idOrden) {
         gestionService.actualizarOrden(idOrden);
     }
 

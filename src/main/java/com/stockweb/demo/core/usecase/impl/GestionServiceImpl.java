@@ -37,6 +37,9 @@ public class GestionServiceImpl implements GestionService {
     @Transactional
     public void setPaqueteOrden(Long idOrden, List<Long> paquetes){
             Orden orden = ordenRepository.findById(idOrden).orElseThrow(()->new NotOrdenException(idOrden));
+            if (orden.getEstadoOrden().getIdEstado() != 1)
+                throw new ErrorExpected("Para asignar un paquete la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+
             for (Long idPaquete : paquetes){
                 paqueteRepository.findById(idPaquete).map(paqueteJpa -> {
                     paqueteJpa.setOrden(orden);
@@ -51,6 +54,9 @@ public class GestionServiceImpl implements GestionService {
     @Transactional
     public void actualizarOrden(Long idOrden) {
         ordenRepository.findById(idOrden).map(ordenJpa ->{
+                if (ordenJpa.getEstadoOrden().getIdEstado()!= 1)
+                    throw new ErrorExpected("Para actualizar el precio la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+
 
                 float precio = 0;
                 for (Paquete paquete : ordenJpa.getPaquetes() ){
@@ -70,8 +76,6 @@ public class GestionServiceImpl implements GestionService {
     public void setAdelanto(Long idOrden) {
         Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new NotOrdenException(idOrden));
 
-        if (orden.getEstadoOrden().getIdEstado() != 1)
-            throw new ErrorExpected("La orden debe estar en estado GENERADA", HttpStatus.BAD_REQUEST);
         if (orden.validarContenido())
             throw new ErrorExpected("La orden debe tener al menos un paquete con contenido", HttpStatus.BAD_REQUEST);
 
@@ -85,6 +89,10 @@ public class GestionServiceImpl implements GestionService {
     }
 
     private void restarStock (Orden orden){
+
+        if (orden.getEstadoOrden().getIdEstado() != 1)
+            throw new ErrorExpected("La orden debe estar en estado GENERADA", HttpStatus.BAD_REQUEST);
+
         for (Paquete paquete: orden.getPaquetes()){
             for (DescPaquete descPaquete: paquete.getDescPaqueteList()){
                 productoRepository.findById(descPaquete.getProducto().getIdProducto()).map(productoJpa -> {

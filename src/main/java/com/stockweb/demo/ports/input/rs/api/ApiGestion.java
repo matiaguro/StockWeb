@@ -12,7 +12,7 @@ public interface ApiGestion {
 
     void setPaqueteOrden (@Valid @RequestBody SetPaqueteRequest setPaqueteRequest);
 
-    void setPaqueteOrden(@NotNull @PathVariable Long idOrden);
+    void actualizarOrden(@NotNull @PathVariable Long idOrden);
 
     void cambioEstado(@Valid @RequestBody CambioEstadoRequest request);
 
