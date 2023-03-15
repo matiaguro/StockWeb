@@ -1,7 +1,5 @@
 package com.stockweb.demo.core.usecase;
 
-import com.stockweb.demo.ports.input.rs.request.gestion.CambioEstadoRequest;
-
 import java.util.List;
 
 public interface GestionService {
@@ -11,5 +9,9 @@ public interface GestionService {
     void actualizarOrden(Long idOrden);
 
     void setAdelanto (Long idOrden);
+
+    void setPagada (Long idOrden);
+
+    void setFinalizada(Long idOrden);
 
 }

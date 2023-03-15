@@ -1,8 +1,11 @@
 package com.stockweb.demo.core.model;
 
+import com.stockweb.demo.config.exception.ErrorExpected;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Builder;
+import org.springframework.http.HttpStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -76,20 +79,19 @@ public class Orden {
         return Objects.hash(idOrden);
     }
 
-    //si da true tiene contenido si da false esta vacio
-    public boolean validarContenido() {
+
+    public void validarContenido() {
 
         if(!paquetes.isEmpty()){
 
             for (Paquete paquete : paquetes) {
                 if (paquete.getDescPaqueteList().isEmpty()){
-                    return true;
+                    throw new ErrorExpected("La orden debe tener al menos un paquete con contenido", HttpStatus.BAD_REQUEST);
 
                 }
             }
-            return false;
         }
-        return true;
+
     }
 
 

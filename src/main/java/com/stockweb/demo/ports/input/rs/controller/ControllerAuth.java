@@ -75,6 +75,7 @@ public class ControllerAuth implements ApiAuth {
         throw new AccessDeniedException("error in the authentication process");
     }
 
+    //TODO AGREGAR METODO LOGOUT
 
 
 }

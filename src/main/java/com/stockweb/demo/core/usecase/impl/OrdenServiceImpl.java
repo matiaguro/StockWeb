@@ -47,6 +47,7 @@ public class OrdenServiceImpl implements OrdenService {
                 .fechaModificacion(Fecha.get())
                 .precioTotal(0)
                 .usuario(authService.getUser())
+                .adelanto(false)
                 .build()
         );
 

@@ -43,6 +43,11 @@ public class PaqueteServiceImpl implements PaqueteService {
     @Transactional
     public void agregarProducto(Long idPaquete, List<AddOrRemoveProductRequest> paqueteRequest) {
         Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+
+        if(paquete.getOrden() != null && paquete.getOrden().getEstadoOrden().getIdEstado() != 1)
+            throw new ErrorExpected("No se puede agregar productos si la orden asignada al paquete no esta en estado GENERADA", HttpStatus.BAD_REQUEST);
+
+
         for(AddOrRemoveProductRequest addProduct : paqueteRequest){
             Producto producto = productoRepository.findById(addProduct.getIdProducto()).orElseThrow(() -> new NotProductException(addProduct.getIdProducto()));
             if (!descPaqueteRepository.existsByPaqueteAndProducto(paquete,producto)){
@@ -52,7 +57,7 @@ public class PaqueteServiceImpl implements PaqueteService {
                 descPaquete.setCantidad(addProduct.getCantidad());
                 descPaqueteRepository.save(descPaquete);
             }else {
-                throw new ErrorExpected("El producto ya esta agregado, la modifique cantidad", HttpStatus.BAD_REQUEST);
+                throw new ErrorExpected("El producto ya esta agregado, modifique cantidad", HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -61,6 +66,10 @@ public class PaqueteServiceImpl implements PaqueteService {
     @Transactional
     public void sacarProducto(Long idPaquete,  List<AddOrRemoveProductRequest> paqueteRequest) {
         Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+
+        if(paquete.getOrden() != null && paquete.getOrden().getEstadoOrden().getIdEstado() != 1)
+            throw new ErrorExpected("No se puede sacar productos si la orden asignada al paquete no esta en estado GENERADA", HttpStatus.BAD_REQUEST);
+
         for(AddOrRemoveProductRequest addProduct : paqueteRequest){
             Producto producto = productoRepository.findById(addProduct.getIdProducto()).orElseThrow(() -> new NotProductException(addProduct.getIdProducto()));
                 DescPaquete descPaquete = descPaqueteRepository.findByPaqueteAndProducto(paquete,producto).orElseThrow(() -> new ErrorExpected("El producto de id: "+producto.getIdProducto()+" no se encuentra dentro del paquete con id: "+paquete.getIdPaquete(), HttpStatus.BAD_REQUEST));
@@ -85,6 +94,11 @@ public class PaqueteServiceImpl implements PaqueteService {
     @Override
     @Transactional
     public void deletePaquete(Long idPaquete) {
+        Paquete paquete = paqueteRepository.findById(idPaquete).orElseThrow(() -> new NotPackage(idPaquete));
+
+        if(paquete.getOrden() != null && paquete.getOrden().getEstadoOrden().getIdEstado() != 1)
+            throw new ErrorExpected("No es posible eliminar el paquete, la orden asignada al mismo esta fuera del estado GENERADA ", HttpStatus.BAD_REQUEST);
+
         paqueteRepository.deleteById(idPaquete);
     }
 

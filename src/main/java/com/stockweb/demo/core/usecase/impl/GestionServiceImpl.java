@@ -33,75 +33,120 @@ public class GestionServiceImpl implements GestionService {
     private final EstadoOrdenRepository estadoOrdenRepository;
 
 
+    //TODO AGREGAR METODO DESASIGNAR PAQUETE ORDEN
+
     @Override
     @Transactional
-    public void setPaqueteOrden(Long idOrden, List<Long> paquetes){
-            Orden orden = ordenRepository.findById(idOrden).orElseThrow(()->new NotOrdenException(idOrden));
-            if (orden.getEstadoOrden().getIdEstado() != 1)
-                throw new ErrorExpected("Para asignar un paquete la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+    public void setPaqueteOrden(Long idOrden, List<Long> paquetes) {
+        Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new NotOrdenException(idOrden));
 
-            for (Long idPaquete : paquetes){
-                paqueteRepository.findById(idPaquete).map(paqueteJpa -> {
-                    paqueteJpa.setOrden(orden);
-                    return paqueteRepository.save(paqueteJpa);
-                }).orElseThrow(() -> new NotPackage(idPaquete));
-            }
-            orden.setFechaModificacion(Fecha.get());
-            ordenRepository.save(orden);
+        if (orden.getEstadoOrden().getIdEstado() != 1)
+            throw new ErrorExpected("Para asignar un paquete la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+
+        for (Long idPaquete : paquetes) {
+            paqueteRepository.findById(idPaquete).map(paqueteJpa -> {
+
+                if (paqueteJpa.getOrden() != null)
+                    throw new ErrorExpected("El paquete ya tiene una orden asignada", HttpStatus.BAD_REQUEST);
+
+                paqueteJpa.setOrden(orden);
+                return paqueteRepository.save(paqueteJpa);
+            }).orElseThrow(() -> new NotPackage(idPaquete));
+        }
+        orden.setFechaModificacion(Fecha.get());
+        ordenRepository.save(orden);
     }
 
     @Override
     @Transactional
     public void actualizarOrden(Long idOrden) {
-        ordenRepository.findById(idOrden).map(ordenJpa ->{
-                if (ordenJpa.getEstadoOrden().getIdEstado()!= 1)
-                    throw new ErrorExpected("Para actualizar el precio la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+        ordenRepository.findById(idOrden).map(ordenJpa -> {
+
+            if (ordenJpa.getEstadoOrden().getIdEstado() != 1)
+                throw new ErrorExpected("Para actualizar el precio la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
 
 
-                float precio = 0;
-                for (Paquete paquete : ordenJpa.getPaquetes() ){
-                    for(DescPaquete descPaquete : paquete.getDescPaqueteList()){
-                        precio += descPaquete.getProducto().getPrecio() * descPaquete.getCantidad();
-                    }
+            float precio = 0;
+            for (Paquete paquete : ordenJpa.getPaquetes()) {
+                for (DescPaquete descPaquete : paquete.getDescPaqueteList()) {
+                    precio += descPaquete.getProducto().getPrecio() * descPaquete.getCantidad();
                 }
+            }
 
             ordenJpa.setPrecioTotal(precio);
-          return ordenRepository.save(ordenJpa);
-        } ).orElseThrow(() -> new NotOrdenException(idOrden));
-
+            return ordenRepository.save(ordenJpa);
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
     }
 
     @Override
     @Transactional
     public void setAdelanto(Long idOrden) {
-        Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new NotOrdenException(idOrden));
+        ordenRepository.findById(idOrden).map(ordenJpa -> {
+            ordenJpa.validarContenido();
+            restarStock(ordenJpa);
 
-        if (orden.validarContenido())
-            throw new ErrorExpected("La orden debe tener al menos un paquete con contenido", HttpStatus.BAD_REQUEST);
+            ordenJpa.setFechaModificacion(Fecha.get());
+            ordenJpa.setEstadoOrden(estadoOrdenRepository.findById(2L).orElseThrow());
+            ordenJpa.setAdelanto(true);
 
-        restarStock(orden);
+            return ordenRepository.save(ordenJpa);
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
+    }
 
-        orden.setFechaModificacion(Fecha.get());
-        orden.setEstadoOrden(estadoOrdenRepository.findById(2L).orElseThrow());
-        orden.setAdelanto(true);
-        ordenRepository.save(orden);
+    @Override
+    @Transactional
+    public void setPagada(Long idOrden) {
+        ordenRepository.findById(idOrden).map(ordenJpa -> {
+
+            if (ordenJpa.getEstadoOrden().getIdEstado() != 1 && ordenJpa.getEstadoOrden().getIdEstado() != 2)
+                throw new ErrorExpected("La orden debe estar en estado GENERADA", HttpStatus.BAD_REQUEST);
+
+            if (!ordenJpa.getAdelanto()) {
+                ordenJpa.validarContenido();
+                restarStock(ordenJpa);
+            }
+
+            ordenJpa.setFechaModificacion(Fecha.get());
+            ordenJpa.setEstadoOrden(estadoOrdenRepository.findById(3L).orElseThrow());
+
+            return ordenRepository.save(ordenJpa);
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
+    }
+
+    @Override
+    @Transactional
+    public void setFinalizada(Long idOrden) {
+        ordenRepository.findById(idOrden).map( ordenJpa -> {
+
+            if (ordenJpa.getEstadoOrden().getIdEstado() != 3)
+                throw new ErrorExpected("La orden debe estar en estado PAGADA", HttpStatus.BAD_REQUEST);
+
+            ordenJpa.setFechaFinalizada(Fecha.get());
+            ordenJpa.setEstadoOrden(estadoOrdenRepository.findById(4L).orElseThrow());
+
+            return ordenRepository.save(ordenJpa);
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
 
     }
 
-    private void restarStock (Orden orden){
+
+    private void restarStock(Orden orden) {
 
         if (orden.getEstadoOrden().getIdEstado() != 1)
             throw new ErrorExpected("La orden debe estar en estado GENERADA", HttpStatus.BAD_REQUEST);
 
-        for (Paquete paquete: orden.getPaquetes()){
-            for (DescPaquete descPaquete: paquete.getDescPaqueteList()){
+        for (Paquete paquete : orden.getPaquetes()) {
+            for (DescPaquete descPaquete : paquete.getDescPaqueteList()) {
                 productoRepository.findById(descPaquete.getProducto().getIdProducto()).map(productoJpa -> {
+
+                    if (!(productoJpa.getStock() >= descPaquete.getCantidad()))
+                        throw new ErrorExpected("No hay stock del producto: " + productoJpa.getProducto() , HttpStatus.BAD_REQUEST);
+
                     productoJpa.setStock(productoJpa.getStock() - descPaquete.getCantidad());
                     return productoRepository.save(productoJpa);
                 }).orElseThrow(() -> new NotPackage(descPaquete.getProducto().getIdProducto()));
             }
         }
     }
-
 
 }
