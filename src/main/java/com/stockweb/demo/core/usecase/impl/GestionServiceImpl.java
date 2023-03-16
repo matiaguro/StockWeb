@@ -24,30 +24,49 @@ import java.util.List;
 public class GestionServiceImpl implements GestionService {
 
     private final OrdenRepository ordenRepository;
-
     private final PaqueteRepository paqueteRepository;
-
-
     private final ProductoRepository productoRepository;
-
     private final EstadoOrdenRepository estadoOrdenRepository;
 
 
-    //TODO AGREGAR METODO DESASIGNAR PAQUETE ORDEN
+    @Override
+    @Transactional
+    public void removePaqueteOrden(Long idOrden, List<Long> paquetes) {
+        Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new NotOrdenException(idOrden));
+        orden.validEstadoGenerada("Para desasignar un paquete, la orden debe estar en Estado Generada");
+
+        for (Long idPaquete : paquetes){
+            paqueteRepository.findById(idPaquete).map(paqueteJpa ->{
+                paqueteJpa.validOrden();
+                if (paqueteJpa.getOrden().getIdOrden().equals(idOrden)){
+                    paqueteJpa.setOrden(null);
+                }
+                else {
+                    throw new ErrorExpected("El paquete "+idPaquete+ "no tiene asignada la orden "+idOrden ,HttpStatus.BAD_REQUEST);
+                }
+                return paqueteRepository.save(paqueteJpa);
+            }).orElseThrow(() -> new NotPackage(idPaquete));
+        }
+
+        orden.setFechaModificacion(Fecha.get());
+        ordenRepository.save(orden);
+    }
 
     @Override
     @Transactional
     public void setPaqueteOrden(Long idOrden, List<Long> paquetes) {
         Orden orden = ordenRepository.findById(idOrden).orElseThrow(() -> new NotOrdenException(idOrden));
-
-        if (orden.getEstadoOrden().getIdEstado() != 1)
-            throw new ErrorExpected("Para asignar un paquete la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
+        orden.validEstadoGenerada("Para asignar un paquete la orden debe estar en Estado Generada");
 
         for (Long idPaquete : paquetes) {
             paqueteRepository.findById(idPaquete).map(paqueteJpa -> {
 
-                if (paqueteJpa.getOrden() != null)
+                if (paqueteJpa.getOrden() != null){
+                    if (paqueteJpa.getOrden().equals(orden))
+                        throw new ErrorExpected("El paquete ya tiene esta orden asignada", HttpStatus.BAD_REQUEST);
+
                     throw new ErrorExpected("El paquete ya tiene una orden asignada", HttpStatus.BAD_REQUEST);
+                }
 
                 paqueteJpa.setOrden(orden);
                 return paqueteRepository.save(paqueteJpa);
@@ -62,9 +81,7 @@ public class GestionServiceImpl implements GestionService {
     public void actualizarOrden(Long idOrden) {
         ordenRepository.findById(idOrden).map(ordenJpa -> {
 
-            if (ordenJpa.getEstadoOrden().getIdEstado() != 1)
-                throw new ErrorExpected("Para actualizar el precio la orden debe estar en Estado Generada", HttpStatus.BAD_REQUEST);
-
+            ordenJpa.validEstadoGenerada("Para actualizar el precio la orden debe estar en Estado Generada");
 
             float precio = 0;
             for (Paquete paquete : ordenJpa.getPaquetes()) {
@@ -131,9 +148,7 @@ public class GestionServiceImpl implements GestionService {
 
 
     private void restarStock(Orden orden) {
-
-        if (orden.getEstadoOrden().getIdEstado() != 1)
-            throw new ErrorExpected("La orden debe estar en estado GENERADA", HttpStatus.BAD_REQUEST);
+        orden.validEstadoGenerada("La orden debe estar en estado GENERADA");
 
         for (Paquete paquete : orden.getPaquetes()) {
             for (DescPaquete descPaquete : paquete.getDescPaqueteList()) {

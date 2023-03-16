@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 
 public interface ApiGestion {
 
+    void removePaqueteOrden(@Valid @RequestBody SetPaqueteRequest setPaqueteRequest);
+    
     void setPaqueteOrden (@Valid @RequestBody SetPaqueteRequest setPaqueteRequest);
 
     void actualizarOrden(@NotNull @PathVariable Long idOrden);

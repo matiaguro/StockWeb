@@ -1,13 +1,26 @@
 package com.stockweb.demo.core.model;
 
 import com.stockweb.demo.config.exception.ErrorExpected;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -82,29 +95,25 @@ public class Orden {
 
     public void validarContenido() {
 
-        if(!paquetes.isEmpty()){
+        if(paquetes !=null || !paquetes.isEmpty()){
 
             for (Paquete paquete : paquetes) {
-                if (paquete.getDescPaqueteList().isEmpty()){
+                if (paquete.getDescPaqueteList() == null || paquete.getDescPaqueteList().isEmpty() ){
                     throw new ErrorExpected("La orden debe tener al menos un paquete con contenido", HttpStatus.BAD_REQUEST);
 
                 }
             }
+        }else {
+            throw new ErrorExpected("La orden debe tener al menos un paquete con contenido", HttpStatus.BAD_REQUEST);
         }
 
     }
 
+    public void validEstadoGenerada(String errorMensaje){
+        if (estadoOrden.getIdEstado() != 1)
+            throw new ErrorExpected(errorMensaje, HttpStatus.BAD_REQUEST);
 
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 

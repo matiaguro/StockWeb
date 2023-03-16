@@ -27,11 +27,20 @@ public class ControllerGestion  implements ApiGestion {
     private final GestionService gestionService;
 
     @Override
+    @PatchMapping("/removePaquete")
+    @ResponseStatus(HttpStatus.OK)
+    public void removePaqueteOrden(@Valid @RequestBody SetPaqueteRequest setPaqueteRequest) {
+        gestionService.removePaqueteOrden(setPaqueteRequest.getIdOrden(), setPaqueteRequest.getIdPaquetes());
+
+    }
+
+    @Override
     @PatchMapping("/setPaquete")
     @ResponseStatus(HttpStatus.OK)
     public void setPaqueteOrden(@Valid @RequestBody SetPaqueteRequest setPaqueteRequest) {
         gestionService.setPaqueteOrden(setPaqueteRequest.getIdOrden(), setPaqueteRequest.getIdPaquetes());
     }
+
 
     @Override
     @PatchMapping("/actualizarOrden/{idOrden}")

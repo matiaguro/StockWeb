@@ -2,7 +2,6 @@ package com.stockweb.demo.ports.input.rs.response.paquete;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stockweb.demo.ports.input.rs.request.paquete.DescPaqueteResponse;
-import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

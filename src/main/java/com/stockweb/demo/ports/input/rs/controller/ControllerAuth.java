@@ -47,6 +47,7 @@ public class ControllerAuth implements ApiAuth {
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         Usuario usuario = usuarioControllerMapper.registerRequestToUser(request);
         authService.createEntity(usuario);
+        //TODO Retirar el retorno de jwt token, retornar URL getusuarios con id del user creado
         String jwt = jwtService.generateToken(usuario);
         Date expiration = jwtService.extractExpiration(jwt);
         AuthenticationResponse auth = new AuthenticationResponse();

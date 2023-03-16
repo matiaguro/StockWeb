@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface GestionService {
 
+    void removePaqueteOrden(Long idOrden, List<Long> paquetes);
     void setPaqueteOrden (Long idOrden, List<Long> paquetes);
 
     void actualizarOrden(Long idOrden);

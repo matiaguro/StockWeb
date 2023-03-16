@@ -1,5 +1,7 @@
 package com.stockweb.demo.ports.input.rs.api;
+
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.util.function.Function;
 
 public interface ApiConstants {

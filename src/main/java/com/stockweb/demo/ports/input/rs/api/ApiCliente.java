@@ -1,13 +1,8 @@
 package com.stockweb.demo.ports.input.rs.api;
 
-import com.stockweb.demo.core.model.Cliente;
 import com.stockweb.demo.ports.input.rs.request.cliente.ClienteRequest;
-import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequest;
-import com.stockweb.demo.ports.input.rs.request.producto.ProductoRequestAmount;
 import com.stockweb.demo.ports.input.rs.response.cliente.ClienteResponse;
 import com.stockweb.demo.ports.input.rs.response.cliente.ClienteResponseLista;
-import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponse;
-import com.stockweb.demo.ports.input.rs.response.producto.ProductoResponseLista;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;

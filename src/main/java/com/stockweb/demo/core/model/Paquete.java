@@ -1,10 +1,12 @@
 package com.stockweb.demo.core.model;
 
+import com.stockweb.demo.config.exception.ErrorExpected;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,6 +59,14 @@ public class Paquete {
         return Objects.hash(idPaquete);
     }
 
+
+    public void validOrden(){
+        if (orden == null){
+            throw new ErrorExpected("El paquete no tiene orden asignada", HttpStatus.BAD_REQUEST);
+
+        }
+
+    }
 
 
 

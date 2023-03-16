@@ -1,7 +1,7 @@
 package com.stockweb.demo.ports.input.rs.api;
 
-import com.stockweb.demo.ports.input.rs.request.paquete.PaqueteRequest;
 import com.stockweb.demo.ports.input.rs.request.paquete.PaqueteProductoRequest;
+import com.stockweb.demo.ports.input.rs.request.paquete.PaqueteRequest;
 import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteProductoResponse;
 import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteResponse;
 import org.springframework.http.ResponseEntity;

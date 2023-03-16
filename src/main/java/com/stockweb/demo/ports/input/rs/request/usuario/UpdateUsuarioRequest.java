@@ -1,16 +1,11 @@
 package com.stockweb.demo.ports.input.rs.request.usuario;
 
 
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
