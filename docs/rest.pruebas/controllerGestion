@@ -1,0 +1,19 @@
+=====================================================================================
+								Controller gestion orden
+=====================================================================================
+
+endpoint setPaqueteOrden
+
+		verificar validaciones de json
+		verificar la correcta asignacion de la orden a los paquetes
+		verificar validacion con orden fuera de estado generada
+		verificar peticion con id paquete/orden inexistentes
+		verificar correcta actualizacion de la fecha a la orden
+		validar q no se haga la asignacion de la orden a un paquete con una orden ya asiganada
+
+
+endpoint actualizarOrden
+
+		verificar peticion con orden inexistente
+		verificar peticion con orden fuera de estado generada
+		verificar la correcta actualizacion del precio de la orden

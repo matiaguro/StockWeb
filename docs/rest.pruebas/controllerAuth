@@ -1,0 +1,36 @@
+CONTROLLER AUTH
+
+ENDPOINTS A PROBAR
+
+
+================================================================
+Casos de prueba:               register
+================================================================
+
+[CASO OK]
+Validar el set de datos en base *validar el passwordEncoder* {usuario table}
+Validar set de rol default [OPERARIO]
+Validar recuperacion del user con la url del response *modificacion pendiente*
+
+[CASO BAD REQUEST]
+Validar el intento de creacion de usuario con email existente
+Validar mensajes de los valid en objeto RegisterRequest *pendientes de agregar*
+
+[CASO UNAUTHORIZED]
+Validar peticion sin estar auth
+Validar peticion sin permisos [OPERADOR]
+
+================================================================
+Casos de prueba:               login
+================================================================
+
+[CASO OK]
+Validar la auth con datos existentes en base
+Validar el regreso del token y el date de expiration en fecha y hora local [12hs expiration]
+Validar tener permisos realizar request a otro endpoint que requiera el rol del usuario asignado
+Probar ambos roles ADM y OPERARIO
+
+
+[CASO BAD REQUEST]
+Validar exceptions del objeto RegisterRequest
+Peticion con datos erroneos

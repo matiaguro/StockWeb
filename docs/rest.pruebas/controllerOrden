@@ -1,0 +1,24 @@
+=====================================================================================
+									Controller orden
+=====================================================================================
+creacion de orden
+
+		verificar datos de la creacion en base
+		verificar intento de peticion sin auth.
+
+
+update orden parcial o completa
+
+		verificar peticion con id de orden inexistente
+		verificar los datos modificados en base
+		verificar q se modifique el date de la ultima modificacion
+		verificar la correcta validacion del estado orden [GENERADA]
+		verificar intento de peticion sin auth.
+
+
+update orden usuario
+
+		verificar peticion con id de orden inexistente
+		verificar la correcta modificacion del usuario
+		verificar q se modifique el date de la ultima modificacion
+		verificar intento de peticion sin auth y sin rol ADM
