@@ -6,6 +6,7 @@ import com.stockweb.demo.ports.input.rs.request.paquete.DescPaqueteResponse;
 import com.stockweb.demo.ports.input.rs.request.paquete.PaqueteRequest;
 import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteProductoResponse;
 import com.stockweb.demo.ports.input.rs.response.paquete.PaqueteResponse;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,6 +17,10 @@ import java.util.List;
 @Mapper
 public interface PaqueteControllerMapper extends CommonMapper {
 
+   @IterableMapping (qualifiedByName = "paqueteToPaqueteResponse")
+   List<PaqueteResponse> paqueteListoToPaqueteResponseLista (List<Paquete> paquetes);
+
+   @Named("paqueteToPaqueteResponse")
    PaqueteResponse paqueteToPaqueteResponse (Paquete paquete);
 
    Paquete paqueteRequestToPaquete (PaqueteRequest paqueteRequest);

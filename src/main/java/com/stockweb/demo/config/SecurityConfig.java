@@ -42,6 +42,11 @@ public class SecurityConfig {
             .antMatchers( ApiConstants.PAQUETE_URI + "/**").authenticated()
             //Config Cliente
             .antMatchers(ApiConstants.CLIENTE_URI + "/**").authenticated()
+            //Config Orden
+            .antMatchers(HttpMethod.PATCH, ApiConstants.ORDEN_URI + "editUser/{idOrden}").hasRole("ADMIN")
+            .antMatchers(HttpMethod.POST,ApiConstants.ORDEN_URI ).authenticated()
+            .antMatchers(HttpMethod.DELETE,ApiConstants.ORDEN_URI ).authenticated()
+            .antMatchers(HttpMethod.PATCH,ApiConstants.ORDEN_URI + "editOrden/{idOrden}" ).authenticated()
             // Default access for each Method
             .antMatchers(HttpMethod.GET).authenticated()
             .antMatchers(HttpMethod.POST).hasRole("ADMIN")

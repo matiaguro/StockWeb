@@ -16,5 +16,11 @@ public class UpdateOrdenRequest {
     @JsonProperty ("idUser")
     private Long idUser;
 
+    @JsonProperty ("idCliente")
+    private Long idCliente;
+
+    @JsonProperty ("descripcion")
+    private String descripcion;
+
 
 }

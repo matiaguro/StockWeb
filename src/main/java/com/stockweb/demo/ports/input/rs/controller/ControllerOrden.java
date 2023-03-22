@@ -1,28 +1,30 @@
 package com.stockweb.demo.ports.input.rs.controller;
 
-import com.stockweb.demo.core.model.Cliente;
+import com.stockweb.demo.core.model.ClienteList;
 import com.stockweb.demo.core.model.Orden;
+import com.stockweb.demo.core.model.OrdenList;
 import com.stockweb.demo.core.usecase.OrdenService;
+import com.stockweb.demo.ports.input.rs.api.ApiConstants;
 import com.stockweb.demo.ports.input.rs.api.ApiOrden;
+import com.stockweb.demo.ports.input.rs.mapper.OrdenControllerMapper;
 import com.stockweb.demo.ports.input.rs.request.orden.OrdenRequest;
 import com.stockweb.demo.ports.input.rs.request.orden.UpdateOrdenRequest;
+import com.stockweb.demo.ports.input.rs.response.cliente.ClienteResponse;
+import com.stockweb.demo.ports.input.rs.response.cliente.ClienteResponseLista;
+import com.stockweb.demo.ports.input.rs.response.orden.OrdenAllResponse;
+import com.stockweb.demo.ports.input.rs.response.orden.OrdenAllResponseLista;
 import com.stockweb.demo.ports.input.rs.response.orden.OrdenResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static com.stockweb.demo.ports.input.rs.api.ApiConstants.ORDEN_URI;
@@ -34,6 +36,9 @@ import static com.stockweb.demo.ports.input.rs.api.ApiConstants.ORDEN_URI;
 public class ControllerOrden implements ApiOrden {
 
     private final OrdenService ordenService;
+
+    private final OrdenControllerMapper ordenControllerMapper;
+
 
     @Override
     @PostMapping
@@ -59,13 +64,14 @@ public class ControllerOrden implements ApiOrden {
     @Override
     @PatchMapping ("editOrden/{idOrden}")
     @ResponseStatus (HttpStatus.OK)
-    public ResponseEntity<Void> uptadeOrdenAdmin(@NotNull @PathVariable Long idOrden, @Valid @RequestBody UpdateOrdenRequest updateOrdenRequest) {
+    public ResponseEntity<Void> uptadeOrden(@NotNull @PathVariable Long idOrden, @Valid @RequestBody UpdateOrdenRequest updateOrdenRequest) {
 
-        Orden orden = ordenService.updateEntityIfExists (idOrden, updateOrdenRequest.getIdUser());
-        ordenService.updateFechaUltimaModificacion (idOrden);
+        //este ordenRequest sera solo para modificar al cliente y/o descripcion
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/byId/{idOrden}")
+        ordenService.updateEntityIfExists (idOrden, updateOrdenRequest);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(ApiConstants.ORDEN_URI + "/byId/{idOrden}")
                 .buildAndExpand(idOrden)
                 .toUri();
 
@@ -73,15 +79,65 @@ public class ControllerOrden implements ApiOrden {
     }
 
     @Override
-    @PatchMapping
+    @PatchMapping ("editUser/{idOrden}")
     @ResponseStatus (HttpStatus.OK)
-    public ResponseEntity<OrdenResponse> updateOrdenUser(Long idOrden, Optional<Cliente> cliente, Optional<String> descripcion) {
+    public ResponseEntity<Void> uptadeOrdenAdmin(@NotNull @PathVariable Long idOrden, @Valid @RequestBody UpdateOrdenRequest updateOrdenRequest) {
 
-        //acordarse de modificar la fecha de modificacion
+        //este ordenRequest sera solo para modificar al usuario que creo la orden (solo admin puede tocar esto)
 
-        return null;
+        ordenService.updateOrdenUser (idOrden, updateOrdenRequest);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(ApiConstants.ORDEN_URI + "/byId/{idOrden}")
+                .buildAndExpand(idOrden)
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
+    @Override
+    @GetMapping ("/byId/{idOrden}")
+    @ResponseStatus (HttpStatus.OK)
+    public ResponseEntity<OrdenAllResponse> findOrden(@NotNull @PathVariable Long idOrden) {
+
+        Orden orden = ordenService.findById(idOrden);
+        OrdenAllResponse ordenAllResponse = ordenControllerMapper.ordenToResponseOrden(orden);
+        return ResponseEntity.ok().body(ordenAllResponse);
+
+    }
+
+    @Override
+    @GetMapping 
+    @ResponseStatus (HttpStatus.OK)
+    public ResponseEntity<OrdenAllResponseLista> getAllOrdenes(Optional<Integer> page, Optional<Integer> size) {
+
+
+
+        final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
+        final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
+
+        OrdenList list = ordenService.getLista(PageRequest.of(pageNumber,pageSize));
+
+        OrdenAllResponseLista response;
+        {
+            response = new OrdenAllResponseLista();
+            List<OrdenAllResponse> contenido =  ordenControllerMapper.ordenListaToOrdenResponseLista(list.getContent());
+            response.setContent (contenido);
+            final int nextPage = list.getPageable().next().getPageNumber();
+            response.setNextUri(ApiConstants.uriByPageAsString.apply(nextPage));
+
+            final int previousPage =list.getPageable().previousOrFirst().getPageNumber();
+            response.setPreviousUri(ApiConstants.uriByPageAsString.apply(previousPage));
+
+            response.setTotalPages(list.getTotalPages());
+            response.setTotalElements(list.getTotalElements());
+
+
+        }
+
+        return ResponseEntity.ok().body(response);
+
+    }
 
 
 }

@@ -58,7 +58,7 @@ public class Orden {
     private List<Paquete> paquetes;
 
     @Column(name = "precio_total")
-    private float precioTotal;
+    private Float precioTotal;
 
     @Column(name = "descripcion")
     private String descripcion;

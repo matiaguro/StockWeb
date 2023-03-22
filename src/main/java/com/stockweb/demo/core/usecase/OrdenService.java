@@ -1,22 +1,27 @@
 package com.stockweb.demo.core.usecase;
 
 import com.stockweb.demo.core.model.Orden;
+import com.stockweb.demo.core.model.OrdenList;
 import com.stockweb.demo.ports.input.rs.request.orden.OrdenRequest;
+import com.stockweb.demo.ports.input.rs.request.orden.UpdateOrdenRequest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 public interface OrdenService {
 
     Orden createOrden (OrdenRequest ordenRequest);
 
-    Void deleteOrden (Long idOrden);
+    void deleteOrden (Long idOrden);
 
-    Orden updateEntityIfExists (Long idOrden, Long idUser);
+    void updateEntityIfExists (Long idOrden, UpdateOrdenRequest updateOrdenRequest);
 
-    void updateFechaUltimaModificacion (Long idOrden);
+    Orden findById (Long idOrden);
 
+    void updateOrdenUser (Long idOrden, UpdateOrdenRequest updateOrdenRequest);
 
-
-
+    OrdenList getLista (PageRequest pageRequest);
 
 }
