@@ -58,6 +58,8 @@ public class ControllerUsuario implements ApiUsuario {
         usuarioService.updateUsuarioIfExists(idUsuario,usuario,updateUsuarioRequest.getIdRol());
     }
 
+
+
     @Override
     @GetMapping("getAllUsuarios")
     public ResponseEntity<UsuarioResponseLista> getAllUsuarios(@RequestParam Optional<Integer> page,
@@ -82,6 +84,14 @@ public class ControllerUsuario implements ApiUsuario {
 
             response.setTotalPages(list.getTotalPages());
             response.setTotalElements(list.getTotalElements());}
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    @GetMapping("/byId/{idUsuario}")
+    public ResponseEntity<UsuarioResponse> getUsuarioById(@NotNull @PathVariable Long idUsuario) {
+        Usuario usuario = usuarioService.getUserById(idUsuario);
+        UsuarioResponse response = mapper.usuarioToResponseUsuario(usuario);
         return ResponseEntity.ok().body(response);
     }
 }

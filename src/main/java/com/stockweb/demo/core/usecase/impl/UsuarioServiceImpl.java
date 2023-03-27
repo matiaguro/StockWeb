@@ -63,10 +63,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UsuarioList getLista(PageRequest pageRequest) {
         Page<Usuario> page = usuarioRepository.findAll(pageRequest);
         return new UsuarioList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuario getUserById(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario).orElseThrow(() -> new NotUserException(idUsuario));
     }
 
 

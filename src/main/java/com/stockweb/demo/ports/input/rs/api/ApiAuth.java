@@ -13,10 +13,8 @@ import javax.validation.Valid;
 @Validated
 public interface ApiAuth {
 
-
-
-    ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request);
-
+    ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request);
 
     AuthenticationResponse login(@Valid @RequestBody AuthenticationRequest request);
+
 }

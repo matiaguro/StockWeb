@@ -2,6 +2,7 @@ package com.stockweb.demo.ports.input.rs.api;
 
 import com.stockweb.demo.ports.input.rs.request.usuario.UpdatePasswordRequest;
 import com.stockweb.demo.ports.input.rs.request.usuario.UpdateUsuarioRequest;
+import com.stockweb.demo.ports.input.rs.response.usuario.UsuarioResponse;
 import com.stockweb.demo.ports.input.rs.response.usuario.UsuarioResponseLista;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,5 +26,7 @@ public interface ApiUsuario {
 
     ResponseEntity<UsuarioResponseLista> getAllUsuarios(@RequestParam Optional<Integer> page,
                                                         @RequestParam Optional<Integer> size);
+
+    ResponseEntity<UsuarioResponse> getUsuarioById (@NotNull @PathVariable Long idUsuario);
 
 }

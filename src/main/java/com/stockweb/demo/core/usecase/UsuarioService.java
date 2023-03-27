@@ -14,4 +14,6 @@ public interface UsuarioService {
         void updateUsuarioIfExists(Long idUsuario, Usuario usuario, Long newRol);
 
         UsuarioList getLista (PageRequest pageRequest);
+
+        Usuario getUserById (Long idUsuario);
 }

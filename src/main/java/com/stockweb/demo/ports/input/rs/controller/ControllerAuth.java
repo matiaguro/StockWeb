@@ -5,6 +5,7 @@ import com.stockweb.demo.config.security.JwtService;
 import com.stockweb.demo.core.model.Usuario;
 import com.stockweb.demo.core.usecase.AuthService;
 import com.stockweb.demo.ports.input.rs.api.ApiAuth;
+import com.stockweb.demo.ports.input.rs.api.ApiConstants;
 import com.stockweb.demo.ports.input.rs.mapper.UsuarioControllerMapper;
 import com.stockweb.demo.ports.input.rs.response.authentication.AuthenticationRequest;
 import com.stockweb.demo.ports.input.rs.response.authentication.AuthenticationResponse;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Date;
 
 import static com.stockweb.demo.ports.input.rs.api.ApiConstants.AUTH_URI;
@@ -35,7 +38,6 @@ public class ControllerAuth implements ApiAuth {
 
     private final UsuarioControllerMapper usuarioControllerMapper;
     private final AuthService authService;
-
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -44,16 +46,13 @@ public class ControllerAuth implements ApiAuth {
     @Override
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request){
         Usuario usuario = usuarioControllerMapper.registerRequestToUser(request);
-        authService.createEntity(usuario);
-        //TODO Retirar el retorno de jwt token, retornar URL getusuarios con id del user creado
-        String jwt = jwtService.generateToken(usuario);
-        Date expiration = jwtService.extractExpiration(jwt);
-        AuthenticationResponse auth = new AuthenticationResponse();
-        auth.setToken(jwt);
-        auth.setExpirationDate(expiration);
-        return new ResponseEntity<>(auth, HttpStatus.CREATED);
+        final long idNewUsuario = authService.createEntity(usuario);
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(ApiConstants.USUARIOS_URI + "/byId/{idUsuario}").buildAndExpand(idNewUsuario)
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
 
@@ -75,8 +74,5 @@ public class ControllerAuth implements ApiAuth {
         }
         throw new AccessDeniedException("error in the authentication process");
     }
-
-    //TODO AGREGAR METODO LOGOUT
-
 
 }

@@ -29,7 +29,7 @@ public class RegisterRequest {
     @JoinColumn(name = "email")
     private String email;
 
-    @NotNull@NotNull(message = "el password no puede ser null ")
+    @NotNull(message = "el password no puede ser null ")
     @JoinColumn(name = "password")
     private String password;
 
