@@ -49,6 +49,10 @@ public class OrdenAllResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ",timezone = "GMT-3")
     private Date fechaFinalizada;
 
+    @JsonProperty ("fecha_devolucion")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ",timezone = "GMT-3")
+    private Date fechaDevolucion;
+
     @JsonProperty ("fecha_modificacion")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss ",timezone = "GMT-3")
     private Date fechaModificacion;

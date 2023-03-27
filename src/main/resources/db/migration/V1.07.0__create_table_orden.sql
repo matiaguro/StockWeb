@@ -10,6 +10,7 @@ CREATE TABLE ORDEN
     descripcion VARCHAR (300),
     fecha_generada datetime NOT NULL,
     fecha_finalizada datetime,
+    fecha_devolucion datetime,
     fecha_modificacion datetime,
     adelanto BOOLEAN,
     CONSTRAINT pk_orden PRIMARY KEY (id_orden),

@@ -146,6 +146,53 @@ public class GestionServiceImpl implements GestionService {
 
     }
 
+    @Override
+    @Transactional
+    public void setDevolucion(Long idOrden) {
+
+        ordenRepository.findById(idOrden).map( ordenJpa -> {
+
+            if (ordenJpa.getEstadoOrden().getIdEstado() == 1)
+                throw new ErrorExpected("La orden esta en estado Generada, solo se puede cancelar", HttpStatus.BAD_REQUEST);
+
+            else {
+
+                devolverStock (ordenJpa);
+                ordenJpa.setEstadoOrden(estadoOrdenRepository.findById(6L).orElseThrow());
+                ordenJpa.setFechaDevolucion(Fecha.get());
+
+            }
+
+            return ordenRepository.save(ordenJpa);
+
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
+
+    }
+
+    @Override
+    @Transactional
+    public void setCancelada(Long idOrden) {
+
+
+        ordenRepository.findById(idOrden).map( ordenJpa -> {
+
+            if (ordenJpa.getEstadoOrden().getIdEstado() != 1)
+                throw new ErrorExpected("La orden esta en estado Generada, solo se puede cancelar", HttpStatus.BAD_REQUEST);
+
+            else {
+
+                devolverStock (ordenJpa);
+                ordenJpa.setEstadoOrden(estadoOrdenRepository.findById(5L).orElseThrow());
+                ordenJpa.setFechaFinalizada(Fecha.get());
+
+            }
+
+            return ordenRepository.save(ordenJpa);
+
+        }).orElseThrow(() -> new NotOrdenException(idOrden));
+
+    }
+
 
     private void restarStock(Orden orden) {
         orden.validEstadoGenerada("La orden debe estar en estado GENERADA");
@@ -163,5 +210,24 @@ public class GestionServiceImpl implements GestionService {
             }
         }
     }
+
+    private void devolverStock (Orden orden){
+
+        for (Paquete paquete : orden.getPaquetes()){
+            for (DescPaquete descPaquete : paquete.getDescPaqueteList()){
+
+                productoRepository.findById(descPaquete.getProducto().getIdProducto()).map(productoJpa -> {
+
+                    productoJpa.setStock(productoJpa.getStock() + descPaquete.getCantidad());
+                    return productoRepository.save(productoJpa);
+
+                });
+
+            }
+        }
+
+
+    }
+
 
 }

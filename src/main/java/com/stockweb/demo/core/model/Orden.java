@@ -71,6 +71,10 @@ public class Orden {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaFinalizada;
 
+    @Column(name = "fecha_devolucion")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date fechaDevolucion;
+
     @Column(name = "fecha_modificacion")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date fechaModificacion;

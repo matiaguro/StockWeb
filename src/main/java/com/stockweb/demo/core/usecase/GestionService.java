@@ -15,4 +15,8 @@ public interface GestionService {
 
     void setFinalizada(Long idOrden);
 
+    void setDevolucion (Long idOrden);
+
+    void setCancelada (Long idOrden);
+
 }

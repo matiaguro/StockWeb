@@ -58,8 +58,8 @@ public class ControllerGestion  implements ApiGestion {
             case "ADELANTO" -> gestionService.setAdelanto(request.getIdOrden());
             case "PAGADA" -> gestionService.setPagada(request.getIdOrden());
             case "FINALIZADA" -> gestionService.setFinalizada(request.getIdOrden());
-            case "DEVOLUCION" -> throw new ErrorExpected("DEVOLUCION", HttpStatus.OK);
-            case "CANCELADA" -> throw new ErrorExpected("CANCELADA", HttpStatus.OK);
+            case "DEVOLUCION" -> gestionService.setDevolucion (request.getIdOrden());
+            case "CANCELADA" -> gestionService.setCancelada (request.getIdOrden());
             default -> throw new ErrorExpected("Estado no contemplado", HttpStatus.BAD_REQUEST);
         }
 
